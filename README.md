@@ -9,3 +9,10 @@ run `npm install`
 ## Dev
 
 `npm install mqtt -g`
+
+## Learn
+
+[Node.js](https://nodejs.org/)  
+[Express.js](https://expressjs.com/)  
+[MQTT.js](https://github.com/mqttjs/MQTT.js)  
+[Socket.io](https://socket.io/)
