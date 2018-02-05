@@ -1,12 +1,11 @@
+const logic = require.main.require("./logic/handle_mqtt");
+
 module.exports = function(client) {
   client.on("connect", function() {
-    client.subscribe("presence");
-    client.publish("presence", "Hello mqtt");
+    logic.handle_connect(client);
   });
 
   client.on("message", function(topic, message) {
-    // message is Buffer
-    console.log(message.toString());
-    client.end();
+    logic.handle_message(client, { topic, message });
   });
 };

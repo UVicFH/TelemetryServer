@@ -1,8 +1,7 @@
+const logic = require.main.require("logic/handle_socket");
+
 module.exports = function(io) {
   io.on("connection", function(socket) {
-    socket.emit("news", { hello: "world" });
-    socket.on("my other event", function(data) {
-      console.log(data);
-    });
+    logic.handle_connect(socket);
   });
 };
