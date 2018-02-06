@@ -1,5 +1,4 @@
-const app = require("express")();
-require("./api/routes")(app);
+const app = require("./express/service");
 
 const server = require("http").Server(app);
 require("socket.io")(server);
