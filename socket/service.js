@@ -1,10 +1,17 @@
 const http = require("http");
 const socket_io = require("socket.io");
 
+/**
+ * Initialize Socket.io server
+ * @param {Express object} app - app to connect to http server
+ */
 const init_server = function(app) {
   console.log("Initializing Socket.io server");
+
   try {
+    // connect Express app to http server
     const server = http.Server(app);
+    // then bind server to Socket.io
     socket_io(server);
     server.listen(3000, () =>
       console.log(

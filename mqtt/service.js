@@ -1,9 +1,13 @@
 const mqtt = require("mqtt");
 const mqtt_api = require("./api");
 
+/**
+ * Initialize MQTT server
+ */
 const init_mqtt = function() {
   console.log("Initializing MQTT server");
   let client;
+
   // connect client to mqtt broker
   try {
     client = mqtt.connect("mqtt://test.mosquitto.org:1883");
