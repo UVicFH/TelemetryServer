@@ -5,6 +5,8 @@ module.exports = {
   },
   handle_message: function(client, { topic, message }) {
     // message is Buffer
+    console.log("handling message");
+    console.log(topic.toString());
     console.log(message.toString());
     client.end();
   }
