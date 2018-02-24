@@ -10,7 +10,9 @@ const dbName = `${new Date(Date.now()).toJSON()}-session`;
 // Database and Client
 let db, client;
 
-// Use connect method to connect to the server
+/**
+ * Open connection to MongoDb server
+ */
 const open_connection = MongoClient.connect(url, function(err, new_client) {
   assert.equal(null, err);
   console.log("Connected successfully to server");
@@ -19,7 +21,9 @@ const open_connection = MongoClient.connect(url, function(err, new_client) {
   db = client.db(dbName);
 });
 
-// Use close connection to the server
+/**
+ * Close connection to MongoDB server
+ */
 const close_connection = function() {
   // Stop close attempt if db or client is already undefined
   if (db === undefined || client === undefined) {

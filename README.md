@@ -26,7 +26,8 @@ Then install mongoDB if you don't have it already (which you probably done) usin
 
 Then run `mkdir data` to make a folder which will be the data's home.
 
-then run `mongod --dbpath=./data` to spin up a mongoDB service to hold your data
+Boom, you're done now, MongoDB is set up. If you want to run it to make sure it spins up,
+then run `mongod --dbpath=./data` and make sure it doesn't error out.
 
 ## Dev
 
