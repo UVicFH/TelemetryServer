@@ -9,33 +9,37 @@ const dbName = `formulaHybrid`;
 const collName = `${new Date(Date.now()).toJSON()}-session`;
 
 // Database and Client
-let db, client, collection;
+let db, client;
 
 /**
  * Open connection to MongoDb server
  */
-const open_connection = () => {
+const open_connection = async () => {
   console.log("Initializing MongoDB connection");
 
-  MongoClient.connect(url, function(err, new_client) {
-    assert.equal(null, err);
-    console.log("Connected successfully to MongoDB server");
+  try {
+    client = await MongoClient.connect(url);
+  } catch (error) {
+    console.error(`Failed to connect MongoClient to url: ${url}`);
+    throw error;
+  }
+  console.log("Connected successfully to MongoDB server");
 
-    client = new_client;
-    try {
-      db = client.db(dbName);
-    } catch (error) {
-      console.error(`Failed to open connection to db: ${dbName}`);
-      throw error;
-    }
+  try {
+    db = await client.db(dbName);
+  } catch (error) {
+    console.error(`Failed to open connection to db: ${dbName}`);
+    throw error;
+  }
 
-    try {
-      collection = db.collection(collName);
-    } catch (error) {
-      console.error(`Failed to open collection: ${colName}`);
-      throw error;
-    }
-  });
+  try {
+    module.exports.collection = await db.collection(collName);
+    if (module.exports.collection === undefined)
+      module.exports.collection = await db.createCollection(collName);
+  } catch (error) {
+    console.error(`Failed to open collection: ${colName}`);
+    throw error;
+  }
 
   console.log("MongoDB connection initialize successfully");
 };
@@ -69,36 +73,11 @@ const close_connection = function() {
   console.log("Connected successfully to server");
   db = undefined;
   client = undefined;
+  module.exports.collection = undefined;
 };
-
-/**
- * Insert a single datum into the collection
- * @param {Object} datum - datum to be added to data store
- * @callback {insert_callback} cb - callback called after data has been inserted (or failed to)
- */
-const insert_datum = (datum, cb) => {
-  collection.insert(datum, cb);
-};
-
-/**
- * Insert an array of data into the collection
- * @param {Array} data
- * @callback {insert_callback} cb - callback called after data has been inserted (or failed to)
- */
-const insert_data = (data, cb) => {
-  collection.insertMany(data, cb);
-};
-
-/**
- * callback from inserting data into the data store
- * @callback insert_callback
- * @param {*} err - any error that occured when inserting data into data store
- * @param {Object} result - result object returned form data store
- */
 
 module.exports = {
   open_connection,
   close_connection,
-  insert_datum,
-  insert_data
+  collection: {}
 };
