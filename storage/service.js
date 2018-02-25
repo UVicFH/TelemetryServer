@@ -71,13 +71,30 @@ const close_connection = function() {
   client = undefined;
 };
 
-const insert_datum = datum => {
+/**
+ * Insert a single datum into the collection
+ * @param {Object} datum - datum to be added to data store
+ * @callback {insert_callback} cb - callback called after data has been inserted (or failed to)
+ */
+const insert_datum = (datum, cb) => {
   collection.insert(datum, cb);
 };
 
-const insert_data = data => {
+/**
+ * Insert an array of data into the collection
+ * @param {Array} data
+ * @callback {insert_callback} cb - callback called after data has been inserted (or failed to)
+ */
+const insert_data = (data, cb) => {
   collection.insertMany(data, cb);
 };
+
+/**
+ * callback from inserting data into the data store
+ * @callback insert_callback
+ * @param {*} err - any error that occured when inserting data into data store
+ * @param {Object} result - result object returned form data store
+ */
 
 module.exports = {
   open_connection,
