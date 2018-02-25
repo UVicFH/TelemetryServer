@@ -14,25 +14,31 @@ let db, client, collection;
 /**
  * Open connection to MongoDb server
  */
-const open_connection = MongoClient.connect(url, function(err, new_client) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
+const open_connection = () => {
+  console.log("Initializing MongoDB connection");
 
-  client = new_client;
-  try {
-    db = client.db(dbName);
-  } catch (error) {
-    console.error(`Failed to open connection to db: ${dbName}`);
-    throw error;
-  }
+  MongoClient.connect(url, function(err, new_client) {
+    assert.equal(null, err);
+    console.log("Connected successfully to MongoDB server");
 
-  try {
-    collection = db.collection(collName);
-  } catch (error) {
-    console.error(`Failed to open collection: ${colName}`);
-    throw error;
-  }
-});
+    client = new_client;
+    try {
+      db = client.db(dbName);
+    } catch (error) {
+      console.error(`Failed to open connection to db: ${dbName}`);
+      throw error;
+    }
+
+    try {
+      collection = db.collection(collName);
+    } catch (error) {
+      console.error(`Failed to open collection: ${colName}`);
+      throw error;
+    }
+  });
+
+  console.log("MongoDB connection initialize successfully");
+};
 
 /**
  * Close connection to MongoDB server
@@ -65,7 +71,17 @@ const close_connection = function() {
   client = undefined;
 };
 
+const insert_datum = datum => {
+  collection.insert(datum, cb);
+};
+
+const insert_data = data => {
+  collection.insertMany(data, cb);
+};
+
 module.exports = {
   open_connection,
-  close_connection
+  close_connection,
+  insert_datum,
+  insert_data
 };
