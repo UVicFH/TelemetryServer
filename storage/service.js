@@ -4,11 +4,12 @@ const assert = require("assert");
 // Connection URL
 const url = "mongodb://localhost:27017";
 
-// Database Name
-const dbName = `${new Date(Date.now()).toJSON()}-session`;
+// Database & Collection Name
+const dbName = `formulaHybrid`;
+const collName = `${new Date(Date.now()).toJSON()}-session`;
 
 // Database and Client
-let db, client;
+let db, client, collection;
 
 /**
  * Open connection to MongoDb server
@@ -18,7 +19,19 @@ const open_connection = MongoClient.connect(url, function(err, new_client) {
   console.log("Connected successfully to server");
 
   client = new_client;
-  db = client.db(dbName);
+  try {
+    db = client.db(dbName);
+  } catch (error) {
+    console.error(`Failed to open connection to db: ${dbName}`);
+    throw error;
+  }
+
+  try {
+    collection = db.collection(collName);
+  } catch (error) {
+    console.error(`Failed to open collection: ${colName}`);
+    throw error;
+  }
 });
 
 /**
