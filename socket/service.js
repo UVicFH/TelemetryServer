@@ -5,7 +5,7 @@ const socket_io = require("socket.io");
  * Initialize Socket.io server
  * @param {Express object} app - app to connect to http server
  */
-const init_server = function(app) {
+const init_server = async function(app) {
   console.log("Initializing Socket.io server");
 
   try {
@@ -13,7 +13,7 @@ const init_server = function(app) {
     const server = http.Server(app);
     // then bind server to Socket.io
     socket_io(server);
-    server.listen(3000, () =>
+    module.exports.socket = await server.listen(3000, () =>
       console.log(
         "Socket.io server initialize successfully and is listening on port 3000!"
       )
