@@ -1,4 +1,5 @@
 const data_store_actions = require("../storage/actions");
+const socket_actions = require("../socket/actions");
 
 module.exports = {
   handle_connect: client => {
@@ -11,6 +12,7 @@ module.exports = {
     console.log(topic.toString());
     console.log(message.toString());
     data_store_actions.write_data({ msg: message.toString() });
+    socket_actions.send_data({ msg: message.toString() });
     client.end();
   }
 };

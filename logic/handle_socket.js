@@ -1,8 +1,7 @@
+const socket_actions = require("../socket/actions");
+
 module.exports = {
-  handle_connect: function(socket) {
-    socket.emit("news", { hello: "world" });
-    socket.on("my other event", function(data) {
-      console.log(data);
-    });
+  handle_connect: socket => {
+    socket_actions.send_data("news", { hello: "world" });
   }
 };
