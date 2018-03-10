@@ -8,9 +8,10 @@ module.exports = {
   },
   handle_message: (client, { topic, message }) => {
     // message is Buffer
-    console.log("handling message");
-    console.log(topic.toString());
-    console.log(message.toString());
+    console.log("handling mqtt message");
+    console.log(`topic: ${topic.toString()}`);
+    console.log(`msg: ${message.toString()}`);
+
     data_store_actions.write_data({ msg: message.toString() });
     socket_actions.send_data({ msg: message.toString() });
     client.end();
