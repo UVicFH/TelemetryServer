@@ -6,7 +6,6 @@ const socket_server = require("./service").get_service();
  */
 const send_data = data => {
   console.log("Sending Websocket data");
-  console.log(socket_server);
   socket_server.emit("tele_data", { data });
 };
 

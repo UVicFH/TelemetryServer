@@ -1,4 +1,4 @@
-const data_store = require("./service").collection;
+const data_store = require("./service");
 const assert = require("assert");
 
 /**
@@ -11,8 +11,8 @@ const write_data = async data => {
   try {
     // Use appropraite insert depending on data type
     result = Array.isArray(data)
-      ? await data_store.insertMany(data)
-      : await data_store.insert(data);
+      ? await data_store.collection.insertMany(data)
+      : await data_store.collection.insert(data);
   } catch (error) {
     console.error(`Failed inserting data ${data}`);
     throw error;
