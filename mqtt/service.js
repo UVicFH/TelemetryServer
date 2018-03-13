@@ -24,7 +24,7 @@ const init_mqtt_client = function() {
  * Get MQTT client instance if available
  */
 const get_mqtt_client = function() {
-  if (mqtt_client === undefined) throw "No mqtt_client created";
+  if (mqtt_client === undefined) throw "No mqtt_client exists";
   return mqtt_client;
 };
 

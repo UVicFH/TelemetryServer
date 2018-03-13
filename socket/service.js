@@ -11,7 +11,7 @@ const init_socket_server = async function(app) {
   if (app === undefined) throw "No express app passed to socket server init";
   if (socket_server !== undefined) throw "Socket server already initialized";
 
-  console.log("Initializing Socket.io server");
+  console.log("Initializing Socket.IO server");
 
   try {
     // connect Express app to http server
@@ -40,7 +40,7 @@ const init_socket_server = async function(app) {
  * Get socket server instance if available
  */
 const get_socket_server = function() {
-  if (socket_server === undefined) throw "No socket_server created";
+  if (socket_server === undefined) throw "No socket_server exists";
   return socket_server;
 };
 

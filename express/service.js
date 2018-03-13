@@ -24,7 +24,7 @@ const init_express = function() {
  * Get Express service if available
  */
 const get_express_app = function() {
-  if (express_app === undefined) throw "No express_app created";
+  if (express_app === undefined) throw "No express_app exists";
   return express_app;
 };
 
