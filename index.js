@@ -1,9 +1,14 @@
+// force better logging
 process.on("unhandledRejection", r => console.log(r));
 
 const data_store = require("./storage/service").open_connection();
 
-const app = require("./express/service")();
+require("./express/service").init();
 
-require("./socket/service")(app);
+const express_app = require("./express/service").get_service();
 
-require("./mqtt/service")();
+require("./socket/service").init(express_app);
+require("./mqtt/service").init();
+
+require("./socket/api").activate();
+require("./mqtt/api").activate();

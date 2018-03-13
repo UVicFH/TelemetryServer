@@ -1,16 +1,16 @@
 const express = require("express");
-const routes_api = require("./api");
+
+let express_app;
 
 /**
- * Initialize express service
+ * Initialize Express service
  * @returns {Express object}
  */
 const init_express = function() {
   console.log("Initializing Express server");
-  let app;
 
   try {
-    app = express();
+    express_app = express();
     console.log(
       "Express server initialize successfully! -- waiting on another module to express app to port"
     );
@@ -18,11 +18,17 @@ const init_express = function() {
     console.error(`Error server failed to initialize due to: ${error}`);
     throw error;
   }
-
-  routes_api(app);
-  return app;
 };
 
-module.exports = function() {
-  return init_express();
+/**
+ * Get Express service if available
+ */
+const get_express_app = function() {
+  if (express_app === undefined) throw "No express_app created";
+  return express_app;
+};
+
+module.exports = {
+  init: init_express,
+  get_service: get_express_app
 };
