@@ -3,7 +3,7 @@ const socket_actions = require("../socket/actions");
 
 module.exports = {
   handle_connect: client => {
-    client.subscribe("presence");
+    client.subscribe("hybrid/#");
     client.publish("presence", "Hello mqtt");
   },
   handle_message: (client, { topic, message }) => {
