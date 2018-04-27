@@ -1,8 +1,12 @@
-const MongoClient = require("mongodb").MongoClient;
-const assert = require("assert");
+/**
+ * @file Storage Manager - Core Service
+ */
+
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
 
 // Connection URL
-const url = "mongodb://localhost:27017";
+const url = 'mongodb://localhost:27017';
 
 // Database & Collection Name
 const dbName = `formulaHybrid`;
@@ -15,7 +19,7 @@ let db, client;
  * Open connection to MongoDb server
  */
 const open_connection = async () => {
-  console.log("Initializing MongoDB connection");
+  console.log('Initializing MongoDB connection');
 
   try {
     client = await MongoClient.connect(url);
@@ -23,7 +27,7 @@ const open_connection = async () => {
     console.error(`Failed to connect MongoClient to url: ${url}`);
     throw error;
   }
-  console.log("Connected successfully to MongoDB server");
+  console.log('Connected successfully to MongoDB server');
 
   try {
     db = await client.db(dbName);
@@ -41,7 +45,7 @@ const open_connection = async () => {
     throw error;
   }
 
-  console.log("MongoDB connection initialize successfully");
+  console.log('MongoDB connection initialize successfully');
 };
 
 /**
@@ -70,7 +74,7 @@ const close_connection = function() {
   }
 
   // Notify of sucessful disconnect and set connection vars to undefined
-  console.log("Connected successfully to server");
+  console.log('Connected successfully to server');
   db = undefined;
   client = undefined;
   module.exports.collection = undefined;

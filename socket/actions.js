@@ -1,3 +1,7 @@
+/**
+ * @file Socket.IO Server - Internal Actions
+ */
+
 const socket_server = require('./service').get_service();
 
 /**

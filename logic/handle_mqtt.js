@@ -1,3 +1,7 @@
+/**
+ * @file MQTT Handler - Trigger Actions in Other Services
+ */
+
 const data_store_actions = require('../storage/actions');
 const socket_actions = require('../socket/actions');
 

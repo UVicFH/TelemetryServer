@@ -1,5 +1,9 @@
-const data_store = require("./service");
-const assert = require("assert");
+/**
+ * @file Storage Manager - Internal Actions
+ */
+
+const data_store = require('./service');
+const assert = require('assert');
 
 /**
  * Write data to database

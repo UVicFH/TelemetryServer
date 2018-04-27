@@ -1,4 +1,8 @@
-const mqtt = require("mqtt");
+/**
+ * @file MQTT Client - Core Service
+ */
+
+const mqtt = require('mqtt');
 
 let mqtt_client;
 
@@ -6,14 +10,14 @@ let mqtt_client;
  * Initialize MQTT client
  */
 const init_mqtt_client = function() {
-  if (mqtt_client !== undefined) throw "MQTT client already initialized";
+  if (mqtt_client !== undefined) throw 'MQTT client already initialized';
 
-  console.log("Initializing MQTT client");
+  console.log('Initializing MQTT client');
 
   // connect client to mqtt broker
   try {
-    mqtt_client = mqtt.connect("mqtt://test.mosquitto.org:1883");
-    console.log("MQTT client initialize successfully!");
+    mqtt_client = mqtt.connect('mqtt://test.mosquitto.org:1883');
+    console.log('MQTT client initialize successfully!');
   } catch (error) {
     console.error(`MQTT client failed to initialize due to: ${error}`);
     throw error;
@@ -24,7 +28,7 @@ const init_mqtt_client = function() {
  * Get MQTT client instance if available
  */
 const get_mqtt_client = function() {
-  if (mqtt_client === undefined) throw "No mqtt_client exists";
+  if (mqtt_client === undefined) throw 'No mqtt_client exists';
   return mqtt_client;
 };
 
