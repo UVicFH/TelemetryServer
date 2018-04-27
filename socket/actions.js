@@ -1,12 +1,24 @@
-const socket_server = require("./service").get_service();
+const socket_server = require('./service').get_service();
 
 /**
  * Send data via Socket.IO
  * @param {*} data
  */
 const send_data = data => {
-  console.log("Sending Websocket data");
-  socket_server.emit("tele_data", { ...data });
+  console.log('Sending data over websocket');
+  socket_server.emit('tele_data', data);
+};
+
+/**
+ * Send data ranges via Socket.IO
+ * @param {Object} range - object containing key, min, & max
+ * @param {String} range.key - variable key string
+ * @param {Number} range.min - object containing key, min, & max
+ * @param {Number} range.max - object containing key, min, & max
+ */
+const send_range = range => {
+  console.log('Sending ranges over websocket');
+  socket_server.emit('tele_range', data);
 };
 
 module.exports = {
