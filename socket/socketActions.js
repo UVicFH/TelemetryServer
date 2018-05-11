@@ -2,7 +2,7 @@
  * @file Socket.IO Server - Internal Actions
  */
 
-const socket_server = require('./service').get_service();
+const socket_server = require('./socketService').get_service();
 
 /**
  * Send data via Socket.IO

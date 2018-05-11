@@ -2,8 +2,8 @@
  * @file MQTT Client - External API
  */
 
-const mqtt_client = require('./service').get_service();
-const logic = require.main.require('./logic/handle_mqtt');
+const mqtt_client = require('./mqttService').get_service();
+const logic = require('./mqttHandler');
 
 /**
  * Activate MQTT API

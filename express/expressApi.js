@@ -6,8 +6,8 @@
  * This is currently DEAD CODE
  * This may be used as boilderplate in the future to setup
  */
-const express_app = require('./service').get_service();
-const logic = require.main.require('./logic/handle_routes');
+const express_app = require('./expressService').get_service();
+const logic = require('./expressHandler');
 
 /**
  * Activate Express API

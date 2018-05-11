@@ -1,14 +1,17 @@
 // force better logging
 process.on('unhandledRejection', r => console.log(r));
 
-const data_store = require('./storage/service').open_connection();
+// create global for module path resolution
+global.__base = __dirname;
 
-require('./express/service').init();
+const data_store = require('./storage').service.open_connection();
 
-const express_app = require('./express/service').get_service();
+require('./express/expressService').init();
 
-require('./socket/service').init(express_app);
-require('./mqtt/service').init();
+const express_app = require('./express/expressService').get_service();
 
-require('./socket/api').activate();
-require('./mqtt/api').activate();
+require('./socket/socketService').init(express_app);
+require('./mqtt/mqttService').init();
+
+require('./socket/socketApi').activate();
+require('./mqtt/mqttApi').activate();

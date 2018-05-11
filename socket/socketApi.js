@@ -2,8 +2,8 @@
  * @file Socket.IO Server - External API
  */
 
-const socket_server = require('./service').get_service();
-const logic = require.main.require('./logic/handle_socket');
+const socket_server = require('./socketService').get_service();
+const logic = require('./socketHandler');
 
 /**
  * Activate Socket.IO API

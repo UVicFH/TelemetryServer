@@ -2,7 +2,7 @@
  * @file Storage Manager - Internal Actions
  */
 
-const data_store = require('./service');
+const data_store = require('./storageService');
 const assert = require('assert');
 
 /**
