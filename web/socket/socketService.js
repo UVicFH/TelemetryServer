@@ -5,7 +5,7 @@
 const http = require('http');
 const socket_io = require('socket.io');
 
-const express_app = require(__base + '/httpService');
+const express_app = require(__base + '/web/http').service;
 
 let socket_server;
 

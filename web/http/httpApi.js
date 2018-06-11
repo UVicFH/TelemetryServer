@@ -10,9 +10,8 @@ const express_app = require('./httpService');
 
 /**
  * Activate Express API
- * @param {Express object} express_app
  */
-const activate_express_app = function(express_app) {
+const activate_express_app = function() {
   express_app.get('/', function(req, res) {
     res.send('Hello World!');
   });
