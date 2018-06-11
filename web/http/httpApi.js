@@ -7,7 +7,6 @@
  * This may be used as boilderplate in the future to setup
  */
 const express_app = require('./expressService');
-const logic = require('./expressHandler');
 
 /**
  * Activate Express API

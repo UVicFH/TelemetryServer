@@ -3,7 +3,6 @@
  */
 
 const socket_server = require('./socketService').get_service();
-const logic = require('./socketHandler');
 
 /**
  * Activate Socket.IO API

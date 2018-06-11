@@ -3,7 +3,6 @@
  */
 
 const mqtt_client = require('./mqttService');
-const logic = require('./mqttHandler');
 
 /**
  * Activate MQTT API
