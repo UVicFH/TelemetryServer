@@ -11,7 +11,7 @@ const logic = require('./socketHandler');
 const activate_socket_server = function() {
   socket_server.on('connection', function(socket) {
     console.log(`Websocket Connected with client -> ${socket})`);
-    logic.handle_connect(socket);
+    socket_actions.send_data({ hello: 'world' });
   });
 };
 

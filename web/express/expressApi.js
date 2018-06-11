@@ -15,7 +15,7 @@ const logic = require('./expressHandler');
  */
 const activate_express_app = function(express_app) {
   express_app.get('/', function(req, res) {
-    logic.hello_world({ req, res });
+    res.send('Hello World!');
   });
 };
 
