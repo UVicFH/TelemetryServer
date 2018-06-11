@@ -33,6 +33,4 @@ const get_express_app = function() {
   return express_app;
 };
 
-module.exports = {
-  default: get_express_app()
-};
+module.exports = get_express_app();

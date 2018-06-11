@@ -6,7 +6,7 @@
  * This is currently DEAD CODE
  * This may be used as boilderplate in the future to setup
  */
-const express_app = require('./httpService').default;
+const express_app = require('./httpService');
 
 /**
  * Activate Express API

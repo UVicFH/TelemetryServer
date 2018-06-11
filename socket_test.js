@@ -1,10 +1,10 @@
 // force better logging
 process.on('unhandledRejection', r => console.log(r));
 
-require('./web/http').service.default;
+require('./web/http').service;
 const express_app = require('./web/http').service.activate();
 
-require('./web/socket').service.default;
+require('./web/socket').service;
 require('./web/socket').api.activate();
 
 const socket_actions = require('./web/socket').actions;

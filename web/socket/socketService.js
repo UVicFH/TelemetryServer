@@ -50,6 +50,4 @@ const get_socket_server = function() {
   return socket_server;
 };
 
-module.exports = {
-  default: get_socket_server()
-};
+module.exports = get_socket_server();
