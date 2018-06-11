@@ -6,9 +6,7 @@ global.__base = __dirname;
 
 const data_store = require('./storage').service.open_connection();
 
-require('./express/expressService').init();
-
-const express_app = require('./express/expressService').get_service();
+const express_app = require('./express/expressService');
 
 require('./socket/socketService').init(express_app);
 require('./mqtt/mqttService');

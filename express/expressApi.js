@@ -6,7 +6,7 @@
  * This is currently DEAD CODE
  * This may be used as boilderplate in the future to setup
  */
-const express_app = require('./expressService').get_service();
+const express_app = require('./expressService');
 const logic = require('./expressHandler');
 
 /**

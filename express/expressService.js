@@ -25,14 +25,13 @@ const init_express = function() {
 };
 
 /**
- * Get Express service if available
+ * Get Express service
  */
 const get_express_app = function() {
-  if (express_app === undefined) throw 'No express_app exists';
+  if (express_app === undefined) {
+    init_express();
+  }
   return express_app;
 };
 
-module.exports = {
-  init: init_express,
-  get_service: get_express_app
-};
+module.exports = get_express_app();
