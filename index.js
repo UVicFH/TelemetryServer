@@ -4,12 +4,14 @@ process.on('unhandledRejection', r => console.log(r));
 // create global for module path resolution
 global.__base = __dirname;
 
+/** The following commands are to initialize the service & activate their api */
 const data_store = require('./storage').service.open_connection();
 
-const http_app = require('./http/httpService');
+require('./web/http').service.default;
+require('./web/http').api.activate();
 
-require('./socket/socketService').init(http_app);
-require('./mqtt/mqttService');
+require('./web/socket').service.default;
+require('./web/socket').api.activate();
 
-require('./socket/socketApi').activate();
-require('./mqtt/mqttApi').activate();
+require('./mqtt').service.default;
+require('./mqtt').api.activate();

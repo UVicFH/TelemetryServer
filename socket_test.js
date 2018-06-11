@@ -1,13 +1,13 @@
 // force better logging
-process.on("unhandledRejection", r => console.log(r));
+process.on('unhandledRejection', r => console.log(r));
 
-require("./express/service").init();
-const express_app = require("./express/service").get_service();
+require('./web/http').service.default;
+const express_app = require('./web/http').service.activate();
 
-require("./socket/service").init(express_app);
-require("./socket/api").activate();
+require('./web/socket').service.default;
+require('./web/socket').api.activate();
 
-const socket_actions = require("./socket/actions");
+const socket_actions = require('./web/socket').actions;
 
 let val = 0;
 let countUp = true;

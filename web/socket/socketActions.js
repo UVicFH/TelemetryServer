@@ -2,7 +2,7 @@
  * @file Socket.IO Server - Internal Actions
  */
 
-const socket_server = require('./socketService').get_service();
+const socket_server = require('./socketService').default;
 
 /**
  * Send data via Socket.IO
@@ -26,5 +26,6 @@ const send_range = range => {
 };
 
 module.exports = {
-  send_data
+  send_data,
+  send_range
 };

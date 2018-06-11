@@ -28,10 +28,11 @@ const init_express = function() {
  * Get Express service
  */
 const get_express_app = function() {
-  if (express_app === undefined) {
-    init_express();
-  }
+  if (express_app === undefined) init_express();
+
   return express_app;
 };
 
-module.exports = get_express_app();
+module.exports = {
+  default: get_express_app()
+};

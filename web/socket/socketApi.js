@@ -2,7 +2,8 @@
  * @file Socket.IO Server - External API
  */
 
-const socket_server = require('./socketService').get_service();
+const socket_server = require('./socketService').default;
+const socket_actions = require('./socketActions');
 
 /**
  * Activate Socket.IO API
