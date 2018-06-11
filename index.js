@@ -11,7 +11,7 @@ require('./express/expressService').init();
 const express_app = require('./express/expressService').get_service();
 
 require('./socket/socketService').init(express_app);
-require('./mqtt/mqttService').init();
+require('./mqtt/mqttService');
 
 require('./socket/socketApi').activate();
 require('./mqtt/mqttApi').activate();

@@ -2,7 +2,7 @@
  * @file MQTT Client - External API
  */
 
-const mqtt_client = require('./mqttService').get_service();
+const mqtt_client = require('./mqttService');
 const logic = require('./mqttHandler');
 
 /**

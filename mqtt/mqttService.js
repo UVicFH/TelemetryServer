@@ -28,11 +28,10 @@ const init_mqtt_client = function() {
  * Get MQTT client instance if available
  */
 const get_mqtt_client = function() {
-  if (mqtt_client === undefined) throw 'No mqtt_client exists';
+  if (mqtt_client === undefined) {
+    init_mqtt_client();
+  }
   return mqtt_client;
 };
 
-module.exports = {
-  init: init_mqtt_client,
-  get_service: get_mqtt_client
-};
+module.exports = get_mqtt_client();
