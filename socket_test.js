@@ -1,8 +1,11 @@
 // force better logging
 process.on('unhandledRejection', r => console.log(r));
 
+// create global for module path resolution
+global.__base = __dirname;
+
 require('./web/http').service;
-const express_app = require('./web/http').service.activate();
+require('./web/http').api.activate();
 
 require('./web/socket').service;
 require('./web/socket').api.activate();
