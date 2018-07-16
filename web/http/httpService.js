@@ -11,11 +11,11 @@ let express_app;
  * @returns {Express object}
  */
 const init_express = function() {
-  console.log('Initializing Express server');
+  console.info('Initializing Express server');
 
   try {
     express_app = express();
-    console.log(
+    console.info(
       'Express server initialize successfully! -- waiting on another module to express app to port'
     );
   } catch (error) {
