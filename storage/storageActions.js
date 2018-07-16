@@ -14,9 +14,11 @@ const write_data = async data => {
 
   try {
     // Use appropraite insert depending on data type
-    result = Array.isArray(data)
-      ? await data_store.collection.insertMany(data)
-      : await data_store.collection.insert(data);
+    if (Array.isArray(data)) {
+      result = await data_store.collection.insertMany(data)
+    } else {
+      result = await data_store.collection.insert(data);
+    }
   } catch (error) {
     console.error(`Failed inserting data ${data}`);
     throw error;
@@ -37,7 +39,7 @@ const write_data = async data => {
   }
 
   // Notify user insertion sucessful
-  console.log(`Inserted ${result.result.n} documents into the collection`);
+  console.debug(`Inserted ${result.result.n} documents into the collection`);
   return result;
 };
 

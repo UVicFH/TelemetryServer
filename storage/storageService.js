@@ -9,8 +9,8 @@ const assert = require('assert');
 const url = 'mongodb://localhost:27017';
 
 // Database & Collection Name
-const dbName = `formulaHybrid`;
-const collName = `${new Date(Date.now()).toJSON()}-session`;
+const dbName = `telemetry`;
+const collName = `snapshots-${new Date(Date.now()).toJSON()}`;
 
 // Database and Client
 let db, client;
@@ -19,21 +19,19 @@ let db, client;
  * Open connection to MongoDb server
  */
 const open_connection = async () => {
-  console.log('Initializing MongoDB connection');
+  console.info('Initializing MongoDB connection');
 
   try {
     client = await MongoClient.connect(url);
   } catch (error) {
     console.error(`Failed to connect MongoClient to url: ${url}`);
-    throw error;
   }
-  console.log('Connected successfully to MongoDB server');
+  console.info('Connected successfully to MongoDB server');
 
   try {
     db = await client.db(dbName);
   } catch (error) {
     console.error(`Failed to open connection to db: ${dbName}`);
-    throw error;
   }
 
   try {
@@ -41,11 +39,10 @@ const open_connection = async () => {
     if (module.exports.collection === undefined)
       module.exports.collection = await db.createCollection(collName);
   } catch (error) {
-    console.error(`Failed to open collection: ${colName}`);
-    throw error;
+    console.error(`Failed to open collection: ${collName}`);
   }
 
-  console.log('MongoDB connection initialize successfully');
+  console.info('MongoDB connection initialize successfully');
 };
 
 /**
@@ -74,7 +71,7 @@ const close_connection = function() {
   }
 
   // Notify of sucessful disconnect and set connection vars to undefined
-  console.log('Connected successfully to server');
+  console.info('Disconnected successfully from server');
   db = undefined;
   client = undefined;
   module.exports.collection = undefined;
