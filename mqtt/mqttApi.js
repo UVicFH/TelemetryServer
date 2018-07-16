@@ -68,7 +68,7 @@ const activate_mqtt_client = function() {
         data_store_actions.write_data(next_output);
         delete next_output['_id'];
         db_lastsend = receive_time;
-        last_db_output = next_output;
+        last_db_output = {...next_output};
       } else {
         console.debug('No change in data, not written to db')
       }
