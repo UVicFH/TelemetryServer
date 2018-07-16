@@ -40,11 +40,11 @@ const activate_mqtt_client = function() {
     let parsed_message = message.toString();
     parsed_message = parsed_message.substring(parsed_message.indexOf(":")+1);
 
-    console.debug(
-      `receiving mqtt message\n` +
-        `topic: ${topic.toString()}\n` +
-        `msg: ${parsed_message}\n`
-    );
+    // console.debug(
+    //   `receiving mqtt message\n` +
+    //     `topic: ${topic.toString()}\n` +
+    //     `msg: ${parsed_message}\n`
+    // );
 
     next_output[topic] = parsed_message;
     next_output["time"] = receive_time;
@@ -70,7 +70,7 @@ const activate_mqtt_client = function() {
         db_lastsend = receive_time;
         last_db_output = {...next_output};
       } else {
-        console.debug('No change in data, not written to db')
+        // console.debug('No change in data, not written to db')
       }
     }
   });
