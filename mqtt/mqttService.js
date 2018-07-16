@@ -12,12 +12,12 @@ let mqtt_client;
 const init_mqtt_client = function() {
   if (mqtt_client !== undefined) throw 'MQTT client already initialized';
 
-  console.log('Initializing MQTT client');
+  console.info('Initializing MQTT client');
 
   // connect client to mqtt broker
   try {
-    mqtt_client = mqtt.connect('mqtt://test.mosquitto.org:1883');
-    console.log('MQTT client initialize successfully!');
+    mqtt_client = mqtt.connect('mqtt://localhost:1883');
+    console.info('MQTT client initialize successfully!');
   } catch (error) {
     console.error(`MQTT client failed to initialize due to: ${error}`);
     throw error;
