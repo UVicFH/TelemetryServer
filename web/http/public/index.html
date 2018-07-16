@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UVic Hybrid Telemetry</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery-3.3.1.min.js"></script> 
+    <script src="/js/gauge.min.js"></script> 
+    <script>
+    
+    var socket = io();
+    socket.on('connect', function () {
+        socket.on('tele_data', function (object) {
+            
+            console.log(object);
+            var output = "";
+
+            for (var property in object) {
+                if (object.hasOwnProperty(property)) {
+                    output += '<span class="property">' + property + '</span>' + object[property] + '<br />';
+                }
+            }
+
+            $('#main').html(output);
+            gauge.set(Number(object["hybrid/engine/temperature"])-135); // set actual value
+
+        })
+
+    })
+
+    </script>
+    <link rel="stylesheet" type="text/css" href="public/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="main"></div>
+    <canvas id="Temperature"></canvas>
+</body>
+<script>
+
+    // Set up the gauges
+    var opts = {
+        staticZones: [
+            {strokeStyle: "#EE9D40", min: 0, max: 15}, 
+            {strokeStyle: "#FFDD00", min: 15, max: 25}, 
+            {strokeStyle: "#30B32D", min: 25, max: 52}, 
+            {strokeStyle: "#F03E3E", min: 52, max: 60} 
+        ]
+    }
+
+    var target = document.getElementById('Temperature'); // your canvas element
+    var gauge = new Gauge(target);
+
+    gauge.setOptions(opts); // create sexy gauge!
+    gauge.setMinValue = 0;
+    gauge.maxValue = 60; // set max gauge value
+    
+</script>
+</html>
