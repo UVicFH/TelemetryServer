@@ -13,6 +13,7 @@ const write_data = async data => {
   let result;
 
   try {
+    if (data_store.collection === undefined) return;
     // Use appropraite insert depending on data type
     if (Array.isArray(data)) {
       result = await data_store.collection.insertMany(data)
@@ -21,6 +22,7 @@ const write_data = async data => {
     }
   } catch (error) {
     console.error(`Failed inserting data ${data}`);
+    data_store.close_connection()
     throw error;
   }
 
@@ -35,11 +37,12 @@ const write_data = async data => {
     }
   } catch (error) {
     console.error(`Failed assertion: ${error}`);
+    data_store.close_connection()
     throw error;
   }
 
   // Notify user insertion sucessful
-  console.debug(`Inserted ${result.result.n} documents into the collection`);
+  // console.debug(`Inserted ${result.result.n} documents into the collection`);
   return result;
 };
 

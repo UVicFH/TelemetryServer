@@ -25,6 +25,7 @@ const open_connection = async () => {
     client = await MongoClient.connect(url);
   } catch (error) {
     console.error(`Failed to connect MongoClient to url: ${url}`);
+    return;
   }
   console.info('Connected successfully to MongoDB server');
 
@@ -40,6 +41,7 @@ const open_connection = async () => {
       module.exports.collection = await db.createCollection(collName);
   } catch (error) {
     console.error(`Failed to open collection: ${collName}`);
+    return;
   }
 
   console.info('MongoDB connection initialize successfully');
@@ -49,6 +51,8 @@ const open_connection = async () => {
  * Close connection to MongoDB server
  */
 const close_connection = function() {
+  module.exports.collection = undefined;
+
   // Stop close attempt if db or client is already undefined
   if (db === undefined || client === undefined) {
     if (db === undefined && client === undefined)
@@ -74,11 +78,10 @@ const close_connection = function() {
   console.info('Disconnected successfully from server');
   db = undefined;
   client = undefined;
-  module.exports.collection = undefined;
 };
 
 module.exports = {
   open_connection,
   close_connection,
-  collection: {}
+  collection: undefined
 };
