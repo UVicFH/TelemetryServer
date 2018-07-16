@@ -5,7 +5,7 @@
 const http = require('http');
 const socket_io = require('socket.io');
 
-const express_app = require(__base + '/web/http').service;
+const express_app = require('../../web/http').service;
 
 let socket_server;
 
@@ -17,7 +17,7 @@ const init_socket_server = async function() {
     throw 'No express app setup for socket server init';
   if (socket_server !== undefined) throw 'Socket server already initialized';
 
-  console.log('Initializing Socket.IO server');
+  console.info('Initializing Socket.IO server');
 
   try {
     // connect Express app to http server
@@ -30,8 +30,8 @@ const init_socket_server = async function() {
         host: 'localhost',
         port: 3000
       },
-      () => {
-        console.log(
+      function() {
+        console.info(
           'Socket.IO server initialize and API activated succesfully, and is listening on port 3000!'
         );
       }

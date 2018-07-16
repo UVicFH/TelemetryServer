@@ -3,15 +3,13 @@
  */
 
 const socket_server = require('./socketService');
-const socket_actions = require('./socketActions');
 
 /**
  * Activate Socket.IO API
  */
 const activate_socket_server = function() {
   socket_server.on('connection', function(socket) {
-    console.log(`Websocket Connected with client -> ${socket})`);
-    socket_actions.send_data({ hello: 'world' });
+    console.info(`Websocket Connected with client -> ${socket})`);
   });
 };
 

@@ -9,7 +9,7 @@ const socket_server = require('./socketService');
  * @param {*} data
  */
 const send_data = data => {
-  console.log('Sending data over websocket');
+  console.debug('Sending data over websocket');
   socket_server.emit('tele_data', data);
 };
 
@@ -21,8 +21,8 @@ const send_data = data => {
  * @param {Number} range.max - object containing key, min, & max
  */
 const send_range = range => {
-  console.log('Sending ranges over websocket');
-  socket_server.emit('tele_range', data);
+  console.debug('Sending ranges over websocket');
+  socket_server.emit('tele_range', range);
 };
 
 module.exports = {
