@@ -11,6 +11,13 @@ const express_app = require('./httpService');
  */
 const activate_express_app = function() {
   express_app.use(express.static(path.join(__dirname, "/public")));
+  express_app.listen(3000, '0.0.0.0', function(err) {
+    if(err){
+       console.log(err);
+       } else {
+       console.log("listen:3000");
+    }
+});
 };
 
 module.exports = {
