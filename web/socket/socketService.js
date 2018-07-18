@@ -27,7 +27,7 @@ const init_socket_server = async function() {
 
     await http_server.listen(
       {
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 3000
       },
       function() {
