@@ -4,7 +4,7 @@
 
 // Config vars
 const CONSOLE_TIMEOUT = 1000;
-const SOCKET_TIMEOUT = 100;
+const SOCKET_TIMEOUT = 200;
 const DB_TIMEOUT = 20;
 
  // Libraries
