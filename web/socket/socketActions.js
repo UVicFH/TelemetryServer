@@ -25,7 +25,18 @@ const send_range = range => {
   socket_server.emit('tele_range', range);
 };
 
+/**
+ * Send an MQTT connection status update to the connected
+ * socket clients
+ *
+ * @param {String} status One of either `DISCONNECTED`, `CONNECTED`, or `NO DATA`
+ */
+const send_connection_status = status => {
+  socket_server.emit('tele_connection_status', status);
+};
+
 module.exports = {
   send_data,
-  send_range
+  send_range,
+  send_connection_status,
 };

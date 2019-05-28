@@ -6,9 +6,10 @@
 const CONSOLE_TIMEOUT = 1000;
 const SOCKET_TIMEOUT = 200;
 const DB_TIMEOUT = 20;
+const MQTT_TIMEOUT = 600;
 
- // Libraries
-const _ = require('lodash')
+// Libraries
+const _ = require('lodash');
 
 // Core service
 const mqtt_client = require('./mqttService');
@@ -19,10 +20,14 @@ const data_store_actions = require('../storage').actions;
 
 // API globals
 const next_output = {};
-let last_db_output = {}
+let last_db_output = {};
 let console_lastsend = 0;
 let socket_lastsend = 0;
 let db_lastsend = 0;
+
+const mqtt_timeout = setInterval(() => {
+  socket_actions.send_connection_status('NO DATA');
+}, MQTT_TIMEOUT);
 
 /**
  * Activate MQTT API
@@ -33,12 +38,16 @@ const activate_mqtt_client = function() {
     mqtt_client.publish('hybrid/server_log', 'Hello mqtt, tele server is connected');
   });
 
+  mqtt_client.on('disconnect', () => {
+    socket_actions.send_connection_status('DISCONNECTED');
+  });
+
   mqtt_client.on('message', function(topic, message) {
     if (topic === 'hybrid/server_log') return;
-    
-    let receive_time = new Date().getTime();
+
+    const receive_time = new Date().getTime();
     let parsed_message = message.toString();
-    parsed_message = parsed_message.substring(parsed_message.indexOf(":")+1);
+    parsed_message = parsed_message.substring(parsed_message.indexOf(':')+1);
 
     // console.debug(
     //   `receiving mqtt message\n` +
@@ -47,23 +56,27 @@ const activate_mqtt_client = function() {
     // );
 
     next_output[topic] = parsed_message;
-    next_output["time"] = receive_time;
+    next_output['time'] = receive_time;
 
     if (receive_time - console_lastsend > CONSOLE_TIMEOUT) {
       console.log(next_output);
       console_lastsend = receive_time;
     }
-    
+
     if (receive_time - socket_lastsend > SOCKET_TIMEOUT) {
       socket_actions.send_data(next_output);
+      socket_actions.send_connection_status('CONNECTED');
+
+      mqtt_timeout.refresh();
       socket_lastsend = receive_time;
     }
-    
-    if(receive_time - db_lastsend > DB_TIMEOUT){
+
+    if (receive_time - db_lastsend > DB_TIMEOUT){
       const outputs_equal = _.isEqual(
-        {...last_db_output, time: undefined}, 
+        {...last_db_output, time: undefined},
         {...next_output, time: undefined}
-      )
+      );
+
       if (!outputs_equal) {
         data_store_actions.write_data(next_output);
         delete next_output['_id'];
@@ -77,5 +90,5 @@ const activate_mqtt_client = function() {
 };
 
 module.exports = {
-  activate: activate_mqtt_client
+  activate: activate_mqtt_client,
 };
