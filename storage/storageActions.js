@@ -9,7 +9,7 @@ const assert = require('assert');
  * Write data to database
  * @param {Array | *} data - data or datum to be added to the data store
  */
-const write_data = async data => {
+const write_data = async (data) => {
   let result;
 
   try {

@@ -27,6 +27,11 @@ let console_lastsend = 0;
 let socket_lastsend = 0;
 let db_lastsend = 0;
 
+/*
+ * Send a `NO DATA` connection status if we have not
+ * received any data from the car for the specified amount
+ * of time
+ */
 const mqtt_timeout = setInterval(() => {
   socket_actions.send_connection_status('NO DATA');
 }, MQTT_TIMEOUT);
@@ -34,8 +39,8 @@ const mqtt_timeout = setInterval(() => {
 /**
  * Activate MQTT API
  */
-const activate_mqtt_client = function() {
-  mqtt_client.on('connect', function() {
+const activate_mqtt_client = () => {
+  mqtt_client.on('connect', () => {
     mqtt_client.subscribe('hybrid/#');
     mqtt_client.publish('hybrid/server_log', 'Hello mqtt, tele server is connected');
   });
@@ -44,7 +49,7 @@ const activate_mqtt_client = function() {
     socket_actions.send_connection_status('DISCONNECTED');
   });
 
-  mqtt_client.on('message', function(topic, message) {
+  mqtt_client.on('message', (topic, message) => {
     if (topic === 'hybrid/server_log') return;
 
     const receive_time = new Date().getTime();

@@ -15,7 +15,7 @@ let socket_server;
 /**
  * Initialize Socket.io server
  */
-const init_socket_server = async function() {
+const init_socket_server = async () => {
   if (express_app === undefined) {
     throw new Error('No express app setup for socket server init');
   }
@@ -32,16 +32,14 @@ const init_socket_server = async function() {
     // then bind server to Socket.io
     socket_server = socket_io(http_server);
 
-    await http_server.listen(
-      {
-        host: '0.0.0.0',
-        port: PORT,
-      },
-      function() {
-        console.info('Socket.IO server initialized and API activated succesfully');
-        console.info(`Listening on port ${PORT}...`);
-      }
-    );
+    await http_server.listen({
+      host: '0.0.0.0',
+      port: PORT,
+    }, () => {
+      console.info('Socket.IO server initialized and API activated succesfully');
+      console.info(`Listening on port ${PORT}...`);
+    });
+
   } catch (error) {
     console.error(`Socket.IO server failed to initialize due to: ${error}`);
     throw error;
@@ -51,7 +49,7 @@ const init_socket_server = async function() {
 /**
  * Get socket server instance if available
  */
-const get_socket_server = function() {
+const get_socket_server = () => {
   if (socket_server === undefined) init_socket_server();
   return socket_server;
 };

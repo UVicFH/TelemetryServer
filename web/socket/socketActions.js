@@ -8,7 +8,7 @@ const socket_server = require('./socketService');
  * Send data via Socket.IO
  * @param {*} data
  */
-const send_data = data => {
+const send_data = (data) => {
   // console.debug('Sending data over websocket');
   socket_server.emit('tele_data', data);
 };
@@ -20,7 +20,7 @@ const send_data = data => {
  * @param {Number} range.min - object containing key, min, & max
  * @param {Number} range.max - object containing key, min, & max
  */
-const send_range = range => {
+const send_range = (range) => {
   // console.debug('Sending ranges over websocket');
   socket_server.emit('tele_range', range);
 };
@@ -31,7 +31,7 @@ const send_range = range => {
  *
  * @param {String} status One of either `DISCONNECTED`, `CONNECTED`, or `NO DATA`
  */
-const send_connection_status = status => {
+const send_connection_status = (status) => {
   socket_server.emit('tele_connection_status', status);
 };
 

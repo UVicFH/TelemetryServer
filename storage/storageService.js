@@ -49,7 +49,7 @@ const open_connection = async () => {
 /**
  * Close connection to MongoDB server
  */
-const close_connection = function() {
+const close_connection = () => {
   module.exports.collection = undefined;
 
   // Stop close attempt if db or client is already undefined

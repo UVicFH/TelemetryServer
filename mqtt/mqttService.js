@@ -9,7 +9,7 @@ let mqtt_client;
 /**
  * Initialize MQTT client
  */
-const init_mqtt_client = function() {
+const init_mqtt_client = () => {
   if (mqtt_client !== undefined) {
     throw new Error('MQTT client already initialized');
   }
@@ -19,9 +19,9 @@ const init_mqtt_client = function() {
   // connect client to mqtt broker
   try {
     mqtt_client = mqtt.connect('mqtt://localhost:1883');
-    console.info('MQTT client initialize successfully!');
+    console.info('MQTT client initialized successfully!');
   } catch (error) {
-    console.error(`MQTT client failed to initialize due to: ${error}`);
+    console.error(`MQTT client failed to initialize: ${error}`);
     throw error;
   }
 };
@@ -29,7 +29,7 @@ const init_mqtt_client = function() {
 /**
  * Get MQTT client instance if available
  */
-const get_mqtt_client = function() {
+const get_mqtt_client = () => {
   if (mqtt_client === undefined) {
     init_mqtt_client();
   }

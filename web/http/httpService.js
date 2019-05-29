@@ -10,7 +10,7 @@ let express_app;
  * Initialize Express service
  * @returns {Express object}
  */
-const init_express = function() {
+const init_express = () => {
   console.info('Initializing Express server');
 
   try {
@@ -27,7 +27,7 @@ const init_express = function() {
 /**
  * Get Express service
  */
-const get_express_app = function() {
+const get_express_app = () => {
   if (express_app === undefined) init_express();
 
   return express_app;

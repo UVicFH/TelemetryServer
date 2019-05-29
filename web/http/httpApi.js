@@ -9,7 +9,7 @@ const express_app = require('./httpService');
 /**
  * Activate Express API
  */
-const activate_express_app = function() {
+const activate_express_app = () => {
   express_app.use(express.static(path.join(__dirname, '/public')));
 };
 
