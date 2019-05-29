@@ -3,5 +3,5 @@ const service = require('./storageService');
 
 module.exports = {
   actions,
-  service
+  service,
 };

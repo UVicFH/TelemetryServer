@@ -10,7 +10,9 @@ let mqtt_client;
  * Initialize MQTT client
  */
 const init_mqtt_client = function() {
-  if (mqtt_client !== undefined) throw 'MQTT client already initialized';
+  if (mqtt_client !== undefined) {
+    throw new Error('MQTT client already initialized');
+  }
 
   console.info('Initializing MQTT client');
 
@@ -28,7 +30,9 @@ const init_mqtt_client = function() {
  * Get MQTT client instance if available
  */
 const get_mqtt_client = function() {
-  if (mqtt_client === undefined) init_mqtt_client();
+  if (mqtt_client === undefined) {
+    init_mqtt_client();
+  }
   return mqtt_client;
 };
 

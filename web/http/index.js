@@ -3,5 +3,5 @@ const service = require('./httpService');
 
 module.exports = {
   api,
-  service
+  service,
 };

@@ -5,5 +5,5 @@ const service = require('./socketService');
 module.exports = {
   actions,
   api,
-  service
+  service,
 };

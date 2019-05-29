@@ -10,9 +10,9 @@ const express_app = require('./httpService');
  * Activate Express API
  */
 const activate_express_app = function() {
-  express_app.use(express.static(path.join(__dirname, "/public")));
+  express_app.use(express.static(path.join(__dirname, '/public')));
 };
 
 module.exports = {
-  activate: activate_express_app
+  activate: activate_express_app,
 };

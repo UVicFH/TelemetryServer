@@ -7,15 +7,22 @@ const socket_io = require('socket.io');
 
 const express_app = require('../../web/http').service;
 
+const DEFAULT_PORT = 3000;
+const PORT = process.env.PORT || DEFAULT_PORT;
+
 let socket_server;
 
 /**
  * Initialize Socket.io server
  */
 const init_socket_server = async function() {
-  if (express_app === undefined)
-    throw 'No express app setup for socket server init';
-  if (socket_server !== undefined) throw 'Socket server already initialized';
+  if (express_app === undefined) {
+    throw new Error('No express app setup for socket server init');
+  }
+
+  if (socket_server !== undefined) {
+    throw new Error('Socket server already initialized');
+  }
 
   console.info('Initializing Socket.IO server');
 
@@ -28,12 +35,11 @@ const init_socket_server = async function() {
     await http_server.listen(
       {
         host: '0.0.0.0',
-        port: 3000
+        port: PORT,
       },
       function() {
-        console.info(
-          'Socket.IO server initialize and API activated succesfully, and is listening on port 3000!'
-        );
+        console.info('Socket.IO server initialized and API activated succesfully');
+        console.info(`Listening on port ${PORT}...`);
       }
     );
   } catch (error) {

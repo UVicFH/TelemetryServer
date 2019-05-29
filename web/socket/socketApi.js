@@ -18,5 +18,5 @@ const activate_socket_server = function() {
 };
 
 module.exports = {
-  activate: activate_socket_server
+  activate: activate_socket_server,
 };

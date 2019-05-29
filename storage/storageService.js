@@ -3,7 +3,6 @@
  */
 
 const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
@@ -57,7 +56,7 @@ const close_connection = function() {
   if (db === undefined || client === undefined) {
     if (db === undefined && client === undefined)
       console.error(
-        "db and client are undefined, seems you've already closed this connection"
+        `db and client are undefined, seems you've already closed this connection`
       );
     else
       console.error(
@@ -83,5 +82,5 @@ const close_connection = function() {
 module.exports = {
   open_connection,
   close_connection,
-  collection: undefined
+  collection: undefined,
 };

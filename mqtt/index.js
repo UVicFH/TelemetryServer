@@ -3,5 +3,5 @@ const service = require('./mqttService');
 
 module.exports = {
   api,
-  service
+  service,
 };
