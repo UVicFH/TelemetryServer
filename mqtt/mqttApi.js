@@ -2,11 +2,13 @@
  * @file MQTT Client - External API
  */
 
+const config = require('../config.json');
+
 // Config vars
 const CONSOLE_TIMEOUT = 1000;
-const SOCKET_TIMEOUT = 200;
+const SOCKET_TIMEOUT = config.socket_send_delay || 200;
 const DB_TIMEOUT = 20;
-const MQTT_TIMEOUT = 600;
+const MQTT_TIMEOUT = config.mqtt_timeout || 600;
 
 // Libraries
 const _ = require('lodash');
@@ -47,7 +49,7 @@ const activate_mqtt_client = function() {
 
     const receive_time = new Date().getTime();
     let parsed_message = message.toString();
-    parsed_message = parsed_message.substring(parsed_message.indexOf(':')+1);
+    parsed_message = parsed_message.substring(parsed_message.indexOf(':') + 1);
 
     // console.debug(
     //   `receiving mqtt message\n` +
@@ -71,7 +73,7 @@ const activate_mqtt_client = function() {
       socket_lastsend = receive_time;
     }
 
-    if (receive_time - db_lastsend > DB_TIMEOUT){
+    if (config.mongo_enabled !== false && receive_time - db_lastsend > DB_TIMEOUT) {
       const outputs_equal = _.isEqual(
         {...last_db_output, time: undefined},
         {...next_output, time: undefined}

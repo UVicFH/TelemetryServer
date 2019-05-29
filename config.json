@@ -1,0 +1,5 @@
+{
+  "mongo_enabled": false,
+  "socket_send_delay": 50,
+  "port": 3000
+}
