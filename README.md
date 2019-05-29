@@ -2,18 +2,24 @@
 
 ## Using
 
-### Viewing Data Live Once the data stream has started you can view data live. From the
-local computer navigate to `localhost:3000` in a web browser. You will need your local IP
-address for devices on the same network to connect. To find it open command line and type
-`ipconfig` and note your IPv4 Address (for example: 192.168.1.118). Devices on the
-network can navigate to `192.168.1.118:3000` in a web browser to see the data stream.
+### Viewing Data Live
 
-### Viewing Logged Data There are many ways to see the data that has been logged in the
-Mongo database depending on how you want to deal with the data after.
+Once the data stream has started you can view data live. From the local computer navigate
+to `localhost:3000` in a web browser. You will need your local IP address for devices on
+the same network to connect. To find it open command line and type `ipconfig` and note
+your IPv4 Address (for example: 192.168.1.118). Devices on the network can navigate to
+`192.168.1.118:3000` in a web browser to see the data stream.
 
-### Export Mongo data to CSV (comma separated values) Exporting the data to CSV is an
-easy way to view it in other programs like Excel. To filter the data to a time period you
-want, you can use a filter query on the time field of the data.
+### Viewing Logged Data
+
+There are many ways to see the data that has been logged in the Mongo database depending
+on how you want to deal with the data after.
+
+### Export Mongo data to CSV (comma separated values)
+
+Exporting the data to CSV is an easy way to view it in other programs like Excel. To
+filter the data to a time period you want, you can use a filter query on the time field
+of the data.
 
 To export all the data from the database open command prompt and navigate to the output
 folder you want and enter `mongoexport -d telemetry -c snapshots --type=csv --fields
@@ -113,9 +119,10 @@ that the socket library sits on top of.
 interact directly with standard websockets, this library follows the standard websocket
 api to a tee.
 
-### Simulating Incoming Data If you would like to test the server you can run MQTT Data
-Sender.py which simulates data from a few signals from the car just sweeping across a
-range to demonstrate the server is functional.
+### Simulating Incoming Data
+If you would like to test the server you can run MQTT Data Sender.py which simulates data
+from a few signals from the car just sweeping across a range to demonstrate the server is
+functional.
 
 ## Learn
 
