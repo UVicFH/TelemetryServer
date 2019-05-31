@@ -7,8 +7,13 @@
 import * as yargs from 'yargs';
 import { version } from '../package.json';
 
+const USAGE_MSG =
+`UVic Formula Hybrid Telemetry server v${version}
+
+Usage: telemetry-server <cmd> [args...]`;
+
 yargs
-  .usage('\nUsage: telemetry-server <cmd> [args]')
+  .usage(USAGE_MSG)
   .commandDir('cmd')
   .scriptName('telemetry-server')
   .recommendCommands()
@@ -20,14 +25,13 @@ yargs
     skipValidation: true,
   })
   .version(false)
-  .help('h')
-  .alias('h', 'help')
-  .showHelpOnFail(true)
-  .demandCommand(1, 'Please specify a command')
+  .help('help')
+  .alias('help', 'h')
+  .showHelpOnFail(false)
   .parse(process.argv.slice(2), (_, argv, output) => {
     if (argv.version === true && !argv._.length) {
       console.log(version);
-    } else {
+    } else if (output) {
       console.log(output);
     }
   });
