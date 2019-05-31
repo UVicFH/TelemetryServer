@@ -11,10 +11,10 @@ const logger = getLogger('run.ts');
 export const command = 'run';
 export const desc = 'Read and process incomming MQTT messages';
 
-export const handler = async (argv: Arguments) => {
+export async function handler(argv: Arguments) {
   argv._.shift();
   const args = argv._;
-};
+}
 
 export const builder = {
   noMongo: {
