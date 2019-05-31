@@ -17,7 +17,7 @@ import {
 import * as assert from 'assert';
 import { getLogger } from './logger';
 
-const logger = getLogger();
+const logger = getLogger('storage.ts');
 
 const DB_NAME = 'telemetry';
 const DATABASE_URL = 'mongodb://localhost:27017';
@@ -25,6 +25,11 @@ const COLLECTION_NAME = `snapshots-${new Date(Date.now()).toJSON()}`;
 
 let collection: Collection;
 
+/**
+ * Open a connection to the Mongo server running at `DATABASE_URL`
+ *
+ * @return {Promise} A promise returning nothing
+ */
 export async function openConnection(): Promise<void> {
   logger.info('Initializing MongoDB connection');
 
@@ -60,9 +65,24 @@ export async function openConnection(): Promise<void> {
   });
 }
 
+/**
+ * A TelemetryEntry is an entry or set of entries to
+ * be inserted into the Mongo db
+ */
 export type TelemetryEntry = Array<any> | any;
+
+/**
+ * WriteDataResult is the result of the Mongo insert operation
+ */
 export type WriteDataResult = InsertOneWriteOpResult | InsertWriteOpResult;
 
+/**
+ * Writes the specified data to the Mongo DB
+ *
+ * @param {TelemetryEntry} data The data to write
+ *
+ * @return {Promise} The result of the insert operation
+ */
 export async function writeData(data: TelemetryEntry): Promise<WriteDataResult> {
   return new Promise<WriteDataResult>((resolve, reject) => {
     if (!collection) {

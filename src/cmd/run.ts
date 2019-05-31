@@ -1,4 +1,12 @@
+/**
+ * @file Entry point for main service
+ *
+ * @author Jayden Chan
+ */
 import { Arguments } from 'yargs';
+import { getLogger } from '../modules/logger';
+
+const logger = getLogger('run.ts');
 
 export const command = 'run';
 export const desc = 'Read and process incomming MQTT messages';

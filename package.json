@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+    "build:watch": "tsc -w",
     "start": "node dist/src/index.js"
   },
   "repository": {
@@ -41,6 +42,7 @@
   "homepage": "https://github.com/UVicFH/TelemetryServer#readme",
   "dependencies": {
     "assert": "^2.0.0",
+    "chalk": "^2.4.2",
     "mongodb": "^3.2.6",
     "winston": "^3.2.1",
     "yargs": "^13.2.4"

@@ -1,8 +1,14 @@
+/**
+ * @file Yargs stuff
+ *
+ * @author Jayden Chan
+ */
+
 import * as yargs from 'yargs';
 import { version } from '../package.json';
 
 yargs
-  .usage('\nUsage: telemetry-server [args]')
+  .usage('\nUsage: telemetry-server <cmd> [args]')
   .commandDir('cmd')
   .scriptName('telemetry-server')
   .recommendCommands()
