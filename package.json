@@ -1,0 +1,41 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "UVic Formula Hybrid Telemetry Server",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UVicFH/TelemetryServer.git"
+  },
+  "author": "UVic Formula Hybrid Club",
+  "contributors": [
+    {
+      "name": "Jayden Chan",
+      "email": "jaydencn7@gmail.com",
+      "url": "https://github.com/jayden-chan"
+    },
+    {
+      "name": "Chad McColm",
+      "email": "chadjmccolm@gmail.com",
+      "url": "https://github.com/chadjmccolm"
+    },
+    {
+      "name": "Brendon Earl",
+      "url": "https://github.com/bndnio"
+    },
+    {
+      "name": "Carly Lebeuf",
+      "email": "clebeuf@uvic.ca",
+      "url": "https://github.com/Clebeuf"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UVicFH/TelemetryServer/issues"
+  },
+  "homepage": "https://github.com/UVicFH/TelemetryServer#readme"
+}
