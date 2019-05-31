@@ -1,11 +1,12 @@
 {
-  "name": "server",
+  "name": "telemetry-server",
   "version": "0.1.0",
   "description": "UVic Formula Hybrid Telemetry Server",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/index.js"
+    "build": "tsc",
+    "start": "node dist/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -37,5 +38,18 @@
   "bugs": {
     "url": "https://github.com/UVicFH/TelemetryServer/issues"
   },
-  "homepage": "https://github.com/UVicFH/TelemetryServer#readme"
+  "homepage": "https://github.com/UVicFH/TelemetryServer#readme",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "mongodb": "^3.2.6",
+    "winston": "^3.2.1",
+    "yargs": "^13.2.4"
+  },
+  "devDependencies": {
+    "@types/assert": "^1.4.2",
+    "@types/mongodb": "^3.1.27",
+    "@types/node": "^12.0.4",
+    "@types/yargs": "^13.0.0",
+    "typescript": "^3.5.1"
+  }
 }
