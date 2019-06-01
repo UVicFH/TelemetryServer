@@ -4,8 +4,8 @@
  * @author Jayden Chan
  */
 
+// Libaries
 import * as winston from 'winston';
-
 import * as util from 'util';
 import chalk from 'chalk';
 

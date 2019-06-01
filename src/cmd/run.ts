@@ -3,7 +3,11 @@
  *
  * @author Jayden Chan
  */
+
+// Libraries
 import { Arguments } from 'yargs';
+
+// Modules
 import { getLogger } from '../modules/logger';
 
 const logger = getLogger('run.ts');

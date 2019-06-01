@@ -7,6 +7,7 @@
  * @author Brendon Earl
  */
 
+// Libraries
 import {
   MongoClient,
   Collection,
@@ -15,6 +16,8 @@ import {
 } from 'mongodb';
 
 import * as assert from 'assert';
+
+// Modules
 import { getLogger } from './logger';
 
 const logger = getLogger('storage.ts');

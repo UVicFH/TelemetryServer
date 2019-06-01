@@ -5,9 +5,12 @@
  * @author Brendon Earl
  */
 
+// Libraries
 import * as mqtt from 'mqtt';
-import { getLogger } from './logger';
+import { isEqual } from 'lodash';
 
+// Modules
+import { getLogger } from './logger';
 import { writeData } from '../modules/storage';
 
 const BROKER_ADDR = 'mqtt://localhost:1883';
@@ -94,7 +97,7 @@ export function activate() {
     }
 
     if (receive_time - state.dbLastSent > DB_DELAY){
-      const outputs_equal = _.isEqual(
+      const outputs_equal = isEqual(
         {...state.lastDbOutput, time: undefined},
         {...state.nextOutput, time: undefined}
       );
