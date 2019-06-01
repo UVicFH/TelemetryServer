@@ -3,6 +3,7 @@
  *
  * @author Jayden Chan
  * @author Brendon Earl
+ * @author Chad McColm
  */
 
 // Libraries

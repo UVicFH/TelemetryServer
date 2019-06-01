@@ -31,7 +31,7 @@ let collection: Collection;
 /**
  * Open a connection to the Mongo server running at `DATABASE_URL`
  *
- * @return {Promise} A promise returning nothing
+ * @return {Promise} A promise containing nothing
  */
 export async function openConnection(): Promise<void> {
   logger.info('Initializing MongoDB connection');
