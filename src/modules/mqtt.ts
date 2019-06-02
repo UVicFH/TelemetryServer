@@ -13,10 +13,11 @@ import { isEqual } from 'lodash';
 // Modules
 import { getLogger } from './logger';
 import { writeData } from '../modules/storage';
+import * as socket from '../modules/net/socket';
 
 const BROKER_ADDR = 'mqtt://localhost:1883';
 
-const logger = getLogger('mqtt.ts');
+const logger = getLogger('mqtt');
 let client: mqtt.Client;
 
 const state = {
@@ -56,29 +57,38 @@ export function init(): boolean {
     logger.warn(`No data from car in over ${MQTT_TIMEOUT} ms`);
 
     // TODO: uncomment / fix this line once the socket stuff is working
-    // socket_actions.send_connection_status('NO DATA');
+    socket.sendConnectionStatus('NO DATA');
   }, MQTT_TIMEOUT);
 
   return true;
 }
 
-export function activate() {
-  client.on('connect', function() {
+/**
+ * Activates the MQTT event hooks
+ *
+ * @param {boolean} mongoEnabled Whether to write to Mongo
+ * @param {number} [socketDelay] Milliseconds to wait between socket updates
+ */
+export function activate(mongoEnabled: boolean, socketDelay?: number) {
+  client.on('connect',() => {
     client.subscribe('hybrid/#');
     client.publish('hybrid/server_log', 'Hello mqtt, tele server is connected');
   });
 
   client.on('disconnect', () => {
     // TODO: uncomment / fix this line once the socket stuff is working
-    // socket_actions.send_connection_status('DISCONNECTED');
+    socket.sendConnectionStatus('DISCONNECTED');
   });
 
-  client.on('message', function(topic, message) {
+  client.on('message', (topic, message) => {
     if (topic === 'hybrid/server_log') return;
 
-    const receive_time = new Date().getTime();
-    let parsed_message = message.toString();
-    parsed_message = parsed_message.substring(parsed_message.indexOf(':')+1);
+    const socketDelayMs = socketDelay || SOCKET_DELAY;
+
+    const {
+      receive_time,
+      parsed_message,
+    } = parseMessage(message);
 
     state.nextOutput[topic] = parsed_message;
     state.nextOutput['time'] = receive_time;
@@ -88,16 +98,15 @@ export function activate() {
       state.consoleLastSent = receive_time;
     }
 
-    if (receive_time - state.socketLastSent > SOCKET_DELAY) {
-      // TODO: uncomment / fix this line once the socket stuff is working
-      // socket_actions.send_data(state.nextOutput);
-      // socket_actions.send_connection_status('CONNECTED');
+    if (receive_time - state.socketLastSent > socketDelayMs) {
+      socket.sendData(state.nextOutput);
+      socket.sendConnectionStatus('CONNECTED');
 
       state.mqttInterval.refresh();
       state.socketLastSent = receive_time;
     }
 
-    if (receive_time - state.dbLastSent > DB_DELAY){
+    if (mongoEnabled && receive_time - state.dbLastSent > DB_DELAY){
       const outputs_equal = isEqual(
         {...state.lastDbOutput, time: undefined},
         {...state.nextOutput, time: undefined}
@@ -113,4 +122,27 @@ export function activate() {
       }
     }
   });
+}
+
+/**
+ * Represents a parsed MQTT message
+ */
+type MQTTMessage = {
+  receive_time: number,
+  parsed_message: string
+};
+
+/**
+ * Parses an MQTT message
+ *
+ * @param {Buffer} message The raw MQTT message
+ *
+ * @return {MQTTMessage} The parsed message
+ */
+function parseMessage(message: Buffer): MQTTMessage {
+  const msgStr = message.toString();
+  return {
+    receive_time: new Date().getTime(),
+    parsed_message: msgStr.substring(msgStr.indexOf(':') + 1),
+  };
 }

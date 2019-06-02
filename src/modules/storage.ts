@@ -20,7 +20,7 @@ import * as assert from 'assert';
 // Modules
 import { getLogger } from './logger';
 
-const logger = getLogger('storage.ts');
+const logger = getLogger('storage');
 
 const DB_NAME = 'telemetry';
 const DATABASE_URL = 'mongodb://localhost:27017';

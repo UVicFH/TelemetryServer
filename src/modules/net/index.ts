@@ -7,7 +7,7 @@
  */
 
 import { join } from 'path';
-import { createServer } from 'http';
+import { createServer, Server } from 'http';
 import * as express from 'express';
 
 import { getLogger } from '../logger';
@@ -15,23 +15,40 @@ import * as socket from './socket';
 
 const logger = getLogger('net');
 
-export function run() {
+const SERVER_HOST_ADDR = '0.0.0.0';
+
+let httpServer: Server;
+
+export function init() {
   logger.info('Initializing Express/HTTP/socket.io');
-  let expressApp, io;
 
   try {
-    expressApp = express();
-    const httpServer = createServer(expressApp);
+    const expressApp = express();
+
+    expressApp.use(express.static(join(__dirname, '/public')));
+    logger.info('Express configured to serve static /public folder');
+
+    httpServer = createServer(expressApp);
+
     socket.init(httpServer);
+
   } catch (e) {
     logger.error('Failed to initialize network module');
     logger.error(e);
 
     throw e;
   }
+}
 
-  logger.info('Successfully initialized Express/HTTP/socket.io');
+export function activate(port: number) {
+  if (!httpServer) {
+    throw new Error(`HTTP server isn't initialized!`);
+  }
 
-  expressApp.use(express.static(join(__dirname, '/public')));
-  logger.info('Express configured to serve static /public folder');
+  httpServer.listen({
+    host: SERVER_HOST_ADDR,
+    port,
+  }, () => {
+    logger.info(`Net module successfully initialized, listening on port ${port}`);
+  });
 }

@@ -9,8 +9,12 @@ import { Arguments } from 'yargs';
 
 // Modules
 import { getLogger } from '../modules/logger';
+import * as mqtt from '../modules/mqtt';
+import * as net from '../modules/net';
 
 const logger = getLogger('run.ts');
+
+const DEFAULT_PORT = 3000;
 
 export const command = 'run';
 export const desc = 'Read and process incomming MQTT messages';
@@ -22,7 +26,12 @@ export async function handler(argv: Arguments) {
   argv._.shift();
   const args = argv._;
 
-  logger.debug('inside run func');
+  net.init();
+
+  mqtt.init();
+  mqtt.activate(!argv.noMongo as boolean, argv.socketSendDelay as number);
+
+  net.activate(argv.port as number || DEFAULT_PORT);
 }
 
 export const builder = {

@@ -23,6 +23,14 @@ export function init(server: HTTPServer) {
   logger.info('Initializing socket.io server');
   try {
     socketServer = SocketIO(server);
+
+    socketServer.on('connect', (socket) => {
+      logger.info(`User connected: ${socket.client.id}`);
+    });
+
+    socketServer.on('disconnect', () => {
+      logger.info('A socket user disconnected');
+    });
   } catch (e) {
     logger.error('Failed to initialize socket.io server');
     logger.error(e);
