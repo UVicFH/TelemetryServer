@@ -46,7 +46,7 @@ export function getLogger(moduleName: string): winston.Logger {
     level: 'debug',
     format: winston.format.combine(
       winston.format.timestamp({
-        format: 'HH:mm:ss',
+        format: 'h:mm:ss A',
       }),
       logFormat
     ),

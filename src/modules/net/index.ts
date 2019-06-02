@@ -19,7 +19,12 @@ const SERVER_HOST_ADDR = '0.0.0.0';
 
 let httpServer: Server;
 
-export function init() {
+/**
+ * Initalizes Express/HTTP server
+ *
+ * @return {boolean} Whether the initialization was successful
+ */
+export function init(): boolean {
   logger.info('Initializing Express/HTTP/socket.io');
 
   try {
@@ -30,20 +35,26 @@ export function init() {
 
     httpServer = createServer(expressApp);
 
-    socket.init(httpServer);
-
+    return true;
   } catch (e) {
     logger.error('Failed to initialize network module');
     logger.error(e);
 
-    throw e;
+    return false;
   }
 }
 
+/**
+ * Activates the HTTP server and socket
+ *
+ * @param {number} port The port to listen on
+ */
 export function activate(port: number) {
   if (!httpServer) {
     throw new Error(`HTTP server isn't initialized!`);
   }
+
+  socket.activate(httpServer);
 
   httpServer.listen({
     host: SERVER_HOST_ADDR,

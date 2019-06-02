@@ -11,8 +11,9 @@ import { Arguments } from 'yargs';
 import { getLogger } from '../modules/logger';
 import * as mqtt from '../modules/mqtt';
 import * as net from '../modules/net';
+import { openConnection } from '../modules/storage';
 
-const logger = getLogger('run.ts');
+const logger = getLogger('run');
 
 const DEFAULT_PORT = 3000;
 
@@ -23,14 +24,30 @@ export const desc = 'Read and process incomming MQTT messages';
 export const aliases = ['$0'];
 
 export async function handler(argv: Arguments) {
-  argv._.shift();
-  const args = argv._;
+  const netInitResult = net.init();
+  if (!netInitResult) {
+    return;
+  }
 
-  net.init();
+  if (!argv.noMongo) {
+    logger.info('Connecting to Mongo');
+    try {
+      await openConnection();
+    } catch (e) {
+      logger.error('Failed to connect to Mongo');
+      return;
+    }
+  }
 
-  mqtt.init();
+  const mqttInitResult = mqtt.init(!argv.noMongo as boolean);
+  if (!mqttInitResult) {
+    logger.debug('Init failed');
+    return;
+  }
+
+  logger.info('Initialization successful, activating services');
+
   mqtt.activate(!argv.noMongo as boolean, argv.socketSendDelay as number);
-
   net.activate(argv.port as number || DEFAULT_PORT);
 }
 

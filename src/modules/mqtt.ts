@@ -12,7 +12,7 @@ import { isEqual } from 'lodash';
 
 // Modules
 import { getLogger } from './logger';
-import { writeData } from '../modules/storage';
+import * as storage from '../modules/storage';
 import * as socket from '../modules/net/socket';
 
 const BROKER_ADDR = 'mqtt://localhost:1883';
@@ -26,7 +26,7 @@ const state = {
   consoleLastSent: 0,
   socketLastSent: 0,
   dbLastSent: 0,
-  mqttInterval: undefined,
+  mqttTimeout: undefined,
 };
 
 const CONSOLE_DELAY = 1000;
@@ -37,29 +37,32 @@ const MQTT_TIMEOUT = 600;
 /**
  * Initialize the MQTT client
  *
- * @return Whether the initialization was successful
+ * @return {boolean} Whether the initialization was successful
  */
-export function init(): boolean {
+export function init(mongoEnabled: boolean): boolean {
   if (client !== undefined) throw 'MQTT client already initialized';
 
   logger.info('Initializing MQTT client');
 
   // Connect client to mqtt broker
-  client = mqtt.connect(BROKER_ADDR);
-  if (!client.connected) {
+  try {
+    client = mqtt.connect(BROKER_ADDR);
+  } catch (e) {
     logger.error(`MQTT client failed to initialize`);
+    logger.error(e);
+
     return false;
   }
 
   logger.info('MQTT client initialized successfully, setting MQTT no data timeout');
 
-  state.mqttInterval = setInterval(() => {
+  state.mqttTimeout = setTimeout(() => {
     logger.warn(`No data from car in over ${MQTT_TIMEOUT} ms`);
 
-    // TODO: uncomment / fix this line once the socket stuff is working
     socket.sendConnectionStatus('NO DATA');
   }, MQTT_TIMEOUT);
 
+  logger.info('MQTT timeout interval set');
   return true;
 }
 
@@ -94,7 +97,7 @@ export function activate(mongoEnabled: boolean, socketDelay?: number) {
     state.nextOutput['time'] = receive_time;
 
     if (receive_time - state.consoleLastSent > CONSOLE_DELAY) {
-      console.log(state.nextOutput);
+      logger.info(state.nextOutput);
       state.consoleLastSent = receive_time;
     }
 
@@ -102,7 +105,7 @@ export function activate(mongoEnabled: boolean, socketDelay?: number) {
       socket.sendData(state.nextOutput);
       socket.sendConnectionStatus('CONNECTED');
 
-      state.mqttInterval.refresh();
+      state.mqttTimeout.refresh();
       state.socketLastSent = receive_time;
     }
 
@@ -113,7 +116,7 @@ export function activate(mongoEnabled: boolean, socketDelay?: number) {
       );
 
       if (!outputs_equal) {
-        writeData(state.nextOutput);
+        storage.writeData(state.nextOutput);
         delete state.nextOutput['_id'];
         state.dbLastSent = receive_time;
         state.lastDbOutput = {...state.nextOutput};

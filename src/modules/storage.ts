@@ -37,7 +37,7 @@ export async function openConnection(): Promise<void> {
   logger.info('Initializing MongoDB connection');
 
   return new Promise<void>((resolve, reject) => {
-    MongoClient.connect(DATABASE_URL)
+    MongoClient.connect(DATABASE_URL, { useNewUrlParser: true })
       .then(client => {
         logger.info('Connected successfully to MongoDB server');
 
@@ -63,6 +63,7 @@ export async function openConnection(): Promise<void> {
       })
       .catch(e => {
         logger.error('Failed to open Mongo connection:');
+        logger.error(e);
         reject(e);
       });
   });

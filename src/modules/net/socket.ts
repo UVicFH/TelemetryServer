@@ -19,7 +19,12 @@ const SOCKET_CHANNEL_DATA = 'tele_data';
 const SOCKET_CHANNEL_RANGE = 'tele_range';
 const SOCKET_CHANNEL_CONN = 'tele_connection_status';
 
-export function init(server: HTTPServer) {
+/**
+ * Activates the socket
+ *
+ * @param {HTTPServer} server The HTTP server to bind to
+ */
+export function activate(server: HTTPServer) {
   logger.info('Initializing socket.io server');
   try {
     socketServer = SocketIO(server);
@@ -39,6 +44,9 @@ export function init(server: HTTPServer) {
   }
 }
 
+/**
+ * Asserts that the server exists
+ */
 function assertServerExists() {
   if (!socketServer) {
     throw new Error(`Socket server isn't initialized`);
