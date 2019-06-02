@@ -60,7 +60,7 @@ To setup Mongo on a mac you can use brew. If you don't have brew already, run:
 `/usr/bin/ruby -e "$(curl -fsSL
 https://raw.githubusercontent.com/Homebrew/install/master/install)"`.
 
-Then install Mongo if you don't have it already (which you probably done) using `brew
+Then install Mongo if you don't have it already (which you probably don't) using `brew
 install mongoDB`. Otherwise install it via `apt-get` on Linux, or a download from their
 site.
 
@@ -72,22 +72,18 @@ And that's it, MongoDB is set up. If you want to run it to make sure it spins up
 ## Dev
 
 ### Patterns
+Each module is contained in a single file and exposes its API via ES6 exports. The `net`,
+`socket`, and `mqtt` modules follow the init/activate pattern, where the `init` function
+prepares the module for activation and the `activate` function activates it.
 
-Each module can contain four files: `index`, `actions`, `api`, `service`
-
-Index files are automatically pulled when requiring a folder. For example:
-`require('base/moduleN')` will import the `module.exports` in `base/moduleN/index.js`.
-Each index imports the `module.exports` from the other files in the folder, and exports
-them for a standard api between modules.
-
-Modules work in an isolated fashion where the `service` is what configures and
-initialized the library used. The `api` file controls that module's external interface.
-While the `actions` file exposes functions for other modules to use in order to interact
-with that module.
+#### Error handling
+Errors from the `init` functions are returned, while errors from the `activate` functions
+are thrown. `init` errors are intended to be caught and displayed to the user in a
+readable way, while `activate` errors are unrecoverable and should exit the program.
 
 ### Conventions
 
-There are four modules in this project: `mqtt`, `storage`, `http`, and `socket`. Each
+There are four modules in this project: `mqtt`, `storage`, `net`, and `socket`. Each
 server a critical function in the telemetry data cycle.
 
 #### MQTT
@@ -106,7 +102,7 @@ developer availability.  Regardless, the internal api exposed in the `actions` f
 should stay the same while the service is swapped, so there is little to take into
 consideration when working on the rest of the project.
 
-#### http
+#### net
 
 For our http server we use [Express.js](https://expressjs.com/). It is currently unused
 as an endpoint server, but may be used soon for commands the web client can send back
@@ -120,9 +116,9 @@ interact directly with standard websockets, this library follows the standard we
 api to a tee.
 
 ### Simulating Incoming Data
-If you would like to test the server you can run MQTT Data Sender.py which simulates data
-from a few signals from the car just sweeping across a range to demonstrate the server is
-functional.
+If you would like to test the server you can run MQTT_Data_Generator.py which simulates
+data from a few signals from the car just sweeping across a range to demonstrate the
+server is functional.
 
 ## Learn
 
