@@ -27,12 +27,17 @@ const state = {
   socketLastSent: 0,
   dbLastSent: 0,
   mqttTimeout: undefined,
+  isReceivingData: false,
 };
 
-const CONSOLE_DELAY = 1000;
-const SOCKET_DELAY = 200;
-const DB_DELAY = 20;
-const MQTT_TIMEOUT = 600;
+export interface MQTTOptions {
+  socketSendDelay?: number,
+  consoleLogDelay?: number,
+  dbWriteDelay?: number,
+  mqttTimeout?: number,
+  verboseLogging?: boolean,
+  mongoEnabled: boolean,
+}
 
 /**
  * Initialize the MQTT client
@@ -54,15 +59,7 @@ export function init(mongoEnabled: boolean): boolean {
     return false;
   }
 
-  logger.info('MQTT client initialized successfully, setting MQTT no data timeout');
-
-  state.mqttTimeout = setTimeout(() => {
-    logger.warn(`No data from car in over ${MQTT_TIMEOUT} ms`);
-
-    socket.sendConnectionStatus('NO DATA');
-  }, MQTT_TIMEOUT);
-
-  logger.info('MQTT timeout interval set');
+  logger.info('MQTT client initialized successfully');
   return true;
 }
 
@@ -70,23 +67,77 @@ export function init(mongoEnabled: boolean): boolean {
  * Activates the MQTT event hooks
  *
  * @param {boolean} mongoEnabled Whether to write to Mongo
- * @param {number} [socketDelay] Milliseconds to wait between socket updates
+ * @param {MQTTOptions} options MQTT options
  */
-export function activate(mongoEnabled: boolean, socketDelay?: number) {
+export function activate(options: MQTTOptions) {
+  logger.info('Activating MQTT module');
+
+  const opts = {
+    socketSendDelay: options.socketSendDelay || 200,
+    consoleLogDelay: options.consoleLogDelay || 1000,
+    dbWriteDelay: options.dbWriteDelay || 20,
+    mqttTimeout: options.mqttTimeout || 600,
+    verboseLogging: options.verboseLogging || false,
+    mongoEnabled: options.mongoEnabled
+  };
+
+  state.mqttTimeout = setTimeout(() => {
+    logger.warn(`No data from car in over ${opts.mqttTimeout} ms`);
+
+    socket.sendConnectionStatus('NO DATA');
+    state.isReceivingData = false;
+  }, opts.mqttTimeout);
+
+  logger.info('MQTT timeout interval set');
+
+  logger.info('Activating MQTT hooks');
+
+  activateConnectHook(client);
+  activateDisconnectHook(client);
+  activateMessageHook(client, opts);
+
+  logger.info('Hooks activated');
+}
+
+/**
+ * Activates the onConnect MQTT hook
+ *
+ * @param {mqtt.Client} client The MQTT client
+ */
+function activateConnectHook(client: mqtt.Client) {
   client.on('connect',() => {
     client.subscribe('hybrid/#');
     client.publish('hybrid/server_log', 'Hello mqtt, tele server is connected');
   });
+}
 
+/**
+ * Activates the onDisconnect MQTT hook
+ *
+ * @param {mqtt.Client} client The MQTT client
+ */
+function activateDisconnectHook(client: mqtt.Client) {
   client.on('disconnect', () => {
-    // TODO: uncomment / fix this line once the socket stuff is working
     socket.sendConnectionStatus('DISCONNECTED');
   });
+}
 
+/**
+ * Activates the onMessage MQTT hook
+ *
+ * @param {mqtt.Client} client The MQTT client
+ * @param {MQTTOptions} options The MQTT options
+ */
+function activateMessageHook(client: mqtt.Client, options: MQTTOptions) {
   client.on('message', (topic, message) => {
-    if (topic === 'hybrid/server_log') return;
+    if (topic === 'hybrid/server_log') {
+      return;
+    }
 
-    const socketDelayMs = socketDelay || SOCKET_DELAY;
+    if (!state.isReceivingData) {
+      logger.info('Receiving MQTT data');
+      state.isReceivingData = true;
+    }
 
     const {
       receive_time,
@@ -96,12 +147,12 @@ export function activate(mongoEnabled: boolean, socketDelay?: number) {
     state.nextOutput[topic] = parsed_message;
     state.nextOutput['time'] = receive_time;
 
-    if (receive_time - state.consoleLastSent > CONSOLE_DELAY) {
+    if (options.verboseLogging && receive_time - state.consoleLastSent > options.consoleLogDelay) {
       logger.info(state.nextOutput);
       state.consoleLastSent = receive_time;
     }
 
-    if (receive_time - state.socketLastSent > socketDelayMs) {
+    if (receive_time - state.socketLastSent > options.socketSendDelay) {
       socket.sendData(state.nextOutput);
       socket.sendConnectionStatus('CONNECTED');
 
@@ -109,7 +160,7 @@ export function activate(mongoEnabled: boolean, socketDelay?: number) {
       state.socketLastSent = receive_time;
     }
 
-    if (mongoEnabled && receive_time - state.dbLastSent > DB_DELAY){
+    if (options.mongoEnabled && receive_time - state.dbLastSent > options.dbWriteDelay){
       const outputs_equal = isEqual(
         {...state.lastDbOutput, time: undefined},
         {...state.nextOutput, time: undefined}

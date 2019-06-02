@@ -39,7 +39,11 @@ export function getLogger(moduleName: string): winston.Logger {
         break;
     }
 
-    return `[${timestamp}] [${moduleName}] [${levelFormatted}] ${messageFormatted}`;
+    return util.format('%s %s %s %s',
+      `[${timestamp}]`,
+      `[${moduleName}]`.padEnd(9),
+      `[${levelFormatted}]`.padEnd(17),
+      messageFormatted);
   });
 
   const logger = winston.createLogger({

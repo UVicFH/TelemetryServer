@@ -47,7 +47,16 @@ export async function handler(argv: Arguments) {
 
   logger.info('Initialization successful, activating services');
 
-  mqtt.activate(!argv.noMongo as boolean, argv.socketSendDelay as number);
+  const mqttOptions = {
+    socketSendDelay: argv.socketSendDelay as number || 200,
+    consoleLogDelay: argv.consoleLogDelay as number || 1000,
+    dbWriteDelay: argv.dbWriteDelay as number || 20,
+    mqttTimeout: argv.mqttTimeout as number || 600,
+    verboseLogging: argv.verboseLogging as boolean || false,
+    mongoEnabled: !argv.noMongo as boolean,
+  };
+
+  mqtt.activate(mqttOptions);
   net.activate(argv.port as number || DEFAULT_PORT);
 }
 
@@ -65,6 +74,26 @@ export const builder = {
   socketSendDelay: {
     alias: 's',
     type: 'number',
-    describe: 'Milliseconds between socket updates',
+    describe: 'Millis between socket updates',
+  },
+  consoleLogDelay: {
+    alias: 'c',
+    type: 'number',
+    describe: 'Millis between console updates',
+  },
+  dbWriteDelay: {
+    alias: 'd',
+    type: 'number',
+    describe: 'Millis between db updates',
+  },
+  mqttTimeout: {
+    alias: 't',
+    type: 'number',
+    describe: 'Millis before considering MQTT conn lost',
+  },
+  verboseLogging: {
+    alias: 'v',
+    type: 'boolean',
+    describe: 'Log the MQTT data in the console',
   },
 };
