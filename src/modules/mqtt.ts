@@ -73,13 +73,19 @@ export function activate(options: MQTTOptions) {
   logger.info('Activating MQTT module');
 
   const opts = {
-    socketSendDelay: options.socketSendDelay || 200,
+    socketSendDelay: options.socketSendDelay || 100,
     consoleLogDelay: options.consoleLogDelay || 1000,
     dbWriteDelay: options.dbWriteDelay || 20,
     mqttTimeout: options.mqttTimeout || 600,
     verboseLogging: options.verboseLogging || false,
     mongoEnabled: options.mongoEnabled
   };
+
+  logger.info('MQTT options:');
+  Object.entries(opts).forEach(([key, val]) => {
+    logger.info(`    ${key}: ${val}`);
+  });
+  logger.info('');
 
   state.mqttTimeout = setTimeout(() => {
     logger.warn(`No data from car in over ${opts.mqttTimeout} ms`);
