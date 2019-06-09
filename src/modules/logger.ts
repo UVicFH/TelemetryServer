@@ -9,6 +9,9 @@ import * as winston from 'winston';
 import * as util from 'util';
 import chalk from 'chalk';
 
+const MODULE_PAD_WIDTH = 9;
+const LEVEL_PAD_WIDTH = 17;
+
 /**
  * Creates an instance of a Winston logger
  * that is used by all other modules
@@ -41,8 +44,8 @@ export function getLogger(moduleName: string): winston.Logger {
 
     return util.format('%s %s %s %s',
       `[${timestamp}]`,
-      `[${moduleName}]`.padEnd(9),
-      `[${levelFormatted}]`.padEnd(17),
+      `[${moduleName}]`.padEnd(MODULE_PAD_WIDTH),
+      `[${levelFormatted}]`.padEnd(LEVEL_PAD_WIDTH),
       messageFormatted);
   });
 

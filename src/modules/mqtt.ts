@@ -31,11 +31,11 @@ const state = {
 };
 
 export interface MQTTOptions {
-  socketSendDelay?: number,
-  consoleLogDelay?: number,
-  dbWriteDelay?: number,
-  mqttTimeout?: number,
-  verboseLogging?: boolean,
+  socketSendDelay: number,
+  consoleLogDelay: number,
+  dbWriteDelay: number,
+  mqttTimeout: number,
+  verboseLogging: boolean,
   mongoEnabled: boolean,
 }
 
@@ -72,27 +72,18 @@ export function init(): boolean {
 export function activate(options: MQTTOptions) {
   logger.info('Activating MQTT module');
 
-  const opts = {
-    socketSendDelay: options.socketSendDelay || 100,
-    consoleLogDelay: options.consoleLogDelay || 1000,
-    dbWriteDelay: options.dbWriteDelay || 20,
-    mqttTimeout: options.mqttTimeout || 600,
-    verboseLogging: options.verboseLogging || false,
-    mongoEnabled: options.mongoEnabled,
-  };
-
   logger.info('MQTT options:');
-  Object.entries(opts).forEach(([key, val]) => {
+  Object.entries(options).forEach(([key, val]) => {
     logger.info(`    ${key}: ${val}`);
   });
   logger.info('');
 
   state.mqttTimeout = setTimeout(() => {
-    logger.warn(`No data from car in over ${opts.mqttTimeout} ms`);
+    logger.warn(`No data from car in over ${options.mqttTimeout} ms`);
 
     socket.sendConnectionStatus('NO DATA');
     state.isReceivingData = false;
-  }, opts.mqttTimeout);
+  }, options.mqttTimeout);
 
   logger.info('MQTT timeout interval set');
 
@@ -100,7 +91,7 @@ export function activate(options: MQTTOptions) {
 
   activateConnectHook(client);
   activateDisconnectHook(client);
-  activateMessageHook(client, opts);
+  activateMessageHook(client, options);
 
   logger.info('Hooks activated');
 }

@@ -46,7 +46,7 @@ export async function handler(argv: Arguments) {
 
   logger.info('Initialization successful, activating services');
 
-  const mqttOptions = {
+  const mqttOptions: mqtt.MQTTOptions = {
     socketSendDelay: argv.socketSendDelay as number || 200,
     consoleLogDelay: argv.consoleLogDelay as number || 1000,
     dbWriteDelay: argv.dbWriteDelay as number || 20,
