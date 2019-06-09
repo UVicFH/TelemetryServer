@@ -24,8 +24,8 @@ export const desc = 'Read and process incomming MQTT messages';
 export const aliases = ['$0'];
 
 export async function handler(argv: Arguments) {
-  const netInitResult = net.init();
-  if (!netInitResult) {
+  if (!net.init()) {
+    logger.debug('Net module init failed');
     return;
   }
 
@@ -39,9 +39,8 @@ export async function handler(argv: Arguments) {
     }
   }
 
-  const mqttInitResult = mqtt.init(!argv.noMongo as boolean);
-  if (!mqttInitResult) {
-    logger.debug('Init failed');
+  if (!mqtt.init()) {
+    logger.debug('MQTT Init failed');
     return;
   }
 

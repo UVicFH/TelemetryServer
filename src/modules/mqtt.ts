@@ -44,7 +44,7 @@ export interface MQTTOptions {
  *
  * @return {boolean} Whether the initialization was successful
  */
-export function init(mongoEnabled: boolean): boolean {
+export function init(): boolean {
   if (client !== undefined) throw 'MQTT client already initialized';
 
   logger.info('Initializing MQTT client');
@@ -78,7 +78,7 @@ export function activate(options: MQTTOptions) {
     dbWriteDelay: options.dbWriteDelay || 20,
     mqttTimeout: options.mqttTimeout || 600,
     verboseLogging: options.verboseLogging || false,
-    mongoEnabled: options.mongoEnabled
+    mongoEnabled: options.mongoEnabled,
   };
 
   logger.info('MQTT options:');
