@@ -6,16 +6,16 @@
  * @author Chad McColm
  */
 
-import { join } from 'path';
-import { createServer, Server } from 'http';
-import * as express from 'express';
+import { join } from "path";
+import { createServer, Server } from "http";
+import * as express from "express";
 
-import { getLogger } from '../logger';
-import * as socket from './socket';
+import { getLogger } from "../logger";
+import * as socket from "./socket";
 
-const logger = getLogger('net');
+const logger = getLogger("net");
 
-const SERVER_HOST_ADDR = '0.0.0.0';
+const SERVER_HOST_ADDR = "0.0.0.0";
 
 let httpServer: Server;
 
@@ -25,19 +25,19 @@ let httpServer: Server;
  * @return {boolean} Whether the initialization was successful
  */
 export function init(): boolean {
-  logger.info('Initializing Express/HTTP/socket.io');
+  logger.info("Initializing Express/HTTP/socket.io");
 
   try {
     const expressApp = express();
 
-    expressApp.use(express.static(join(__dirname, '/public')));
-    logger.info('Express configured to serve static /public folder');
+    expressApp.use(express.static(join(__dirname, "/public")));
+    logger.info("Express configured to serve static /public folder");
 
     httpServer = createServer(expressApp);
 
     return true;
   } catch (e) {
-    logger.error('Failed to initialize network module');
+    logger.error("Failed to initialize network module");
     logger.error(e);
 
     return false;
@@ -56,10 +56,19 @@ export function activate(port: number) {
 
   socket.activate(httpServer);
 
-  httpServer.listen({
-    host: SERVER_HOST_ADDR,
-    port,
-  }, () => {
-    logger.info(`Net module successfully initialized, listening on port ${port}`);
-  });
+  httpServer.listen(
+    {
+      host: SERVER_HOST_ADDR,
+      port
+    },
+    () => {
+      logger.info(
+        `Net module successfully initialized, listening on port ${port}`
+      );
+    }
+  );
+        `Net module successfully initialized, listening on port ${port}`
+      );
+    }
+  );
 }

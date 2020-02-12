@@ -6,18 +6,18 @@
  * @author Chad McColm
  */
 
-import * as SocketIO from 'socket.io';
-import { Server as HTTPServer } from 'http';
+import * as SocketIO from "socket.io";
+import { Server as HTTPServer } from "http";
 
-import { getLogger } from '../logger';
+import { getLogger } from "../logger";
 
-const logger = getLogger('socket');
+const logger = getLogger("socket");
 
 let socketServer: SocketIO.Server;
 
-const SOCKET_CHANNEL_DATA = 'tele_data';
-const SOCKET_CHANNEL_RANGE = 'tele_range';
-const SOCKET_CHANNEL_CONN = 'tele_connection_status';
+const SOCKET_CHANNEL_DATA = "tele_data";
+const SOCKET_CHANNEL_RANGE = "tele_range";
+const SOCKET_CHANNEL_CONN = "tele_connection_status";
 
 /**
  * Activates the socket
@@ -25,19 +25,19 @@ const SOCKET_CHANNEL_CONN = 'tele_connection_status';
  * @param {HTTPServer} server The HTTP server to bind to
  */
 export function activate(server: HTTPServer) {
-  logger.info('Initializing socket.io server');
+  logger.info("Initializing socket.io server");
   try {
     socketServer = SocketIO(server);
 
-    socketServer.on('connect', (socket) => {
+    socketServer.on("connect", socket => {
       logger.info(`User connected: ${socket.client.id}`);
     });
 
-    socketServer.on('disconnect', () => {
-      logger.info('A socket user disconnected');
+    socketServer.on("disconnect", () => {
+      logger.info("A socket user disconnected");
     });
   } catch (e) {
-    logger.error('Failed to initialize socket.io server');
+    logger.error("Failed to initialize socket.io server");
     logger.error(e);
 
     throw e;
@@ -68,9 +68,9 @@ export function sendData(data: any) {
  * min and max values for the metric at `key`
  */
 export interface RangeData {
-  key: string,
-  min: number,
-  max: number
+  key: string;
+  min: number;
+  max: number;
 }
 
 /**
@@ -92,7 +92,7 @@ export function sendRange(range: RangeData) {
  *                This likely means the car got disconnected (behind a tree, etc)
  * DISCONNECTED - Server is disconnected from the broker
  */
-export type MQTTConnectionStatus = 'CONNECTED' | 'NO DATA' | 'DISCONNECTED';
+export type MQTTConnectionStatus = "CONNECTED" | "NO DATA" | "DISCONNECTED";
 
 /**
  * Send a connection status update over the socket

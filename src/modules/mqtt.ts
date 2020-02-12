@@ -7,17 +7,17 @@
  */
 
 // Libraries
-import * as mqtt from 'mqtt';
-import { isEqual } from 'lodash';
+import * as mqtt from "mqtt";
+import { isEqual } from "lodash";
 
 // Modules
-import { getLogger } from './logger';
-import * as storage from '../modules/storage';
-import * as socket from '../modules/net/socket';
+import { getLogger } from "./logger";
+import * as storage from "../modules/storage";
+import * as socket from "../modules/net/socket";
 
-const BROKER_ADDR = 'mqtt://localhost:1883';
+const BROKER_ADDR = "mqtt://localhost:1883";
 
-const logger = getLogger('mqtt');
+const logger = getLogger("mqtt");
 let client: mqtt.Client;
 
 const state = {
@@ -27,16 +27,16 @@ const state = {
   socketLastSent: 0,
   dbLastSent: 0,
   mqttTimeout: undefined,
-  isReceivingData: false,
+  isReceivingData: false
 };
 
 export interface MQTTOptions {
-  socketSendDelay: number,
-  consoleLogDelay: number,
-  dbWriteDelay: number,
-  mqttTimeout: number,
-  verboseLogging: boolean,
-  mongoEnabled: boolean,
+  socketSendDelay: number;
+  consoleLogDelay: number;
+  dbWriteDelay: number;
+  mqttTimeout: number;
+  verboseLogging: boolean;
+  mongoEnabled: boolean;
 }
 
 /**
@@ -45,9 +45,9 @@ export interface MQTTOptions {
  * @return {boolean} Whether the initialization was successful
  */
 export function init(): boolean {
-  if (client !== undefined) throw 'MQTT client already initialized';
+  if (client !== undefined) throw "MQTT client already initialized";
 
-  logger.info('Initializing MQTT client');
+  logger.info("Initializing MQTT client");
 
   // Connect client to mqtt broker
   try {
@@ -59,7 +59,7 @@ export function init(): boolean {
     return false;
   }
 
-  logger.info('MQTT client initialized successfully');
+  logger.info("MQTT client initialized successfully");
   return true;
 }
 
@@ -70,30 +70,30 @@ export function init(): boolean {
  * @param {MQTTOptions} options MQTT options
  */
 export function activate(options: MQTTOptions) {
-  logger.info('Activating MQTT module');
+  logger.info("Activating MQTT module");
 
-  logger.info('MQTT options:');
+  logger.info("MQTT options:");
   Object.entries(options).forEach(([key, val]) => {
     logger.info(`    ${key}: ${val}`);
   });
-  logger.info('');
+  logger.info("");
 
   state.mqttTimeout = setTimeout(() => {
     logger.warn(`No data from car in over ${options.mqttTimeout} ms`);
 
-    socket.sendConnectionStatus('NO DATA');
+    socket.sendConnectionStatus("NO DATA");
     state.isReceivingData = false;
   }, options.mqttTimeout);
 
-  logger.info('MQTT timeout interval set');
+  logger.info("MQTT timeout interval set");
 
-  logger.info('Activating MQTT hooks');
+  logger.info("Activating MQTT hooks");
 
   activateConnectHook(client);
   activateDisconnectHook(client);
   activateMessageHook(client, options);
 
-  logger.info('Hooks activated');
+  logger.info("Hooks activated");
 }
 
 /**
@@ -102,9 +102,9 @@ export function activate(options: MQTTOptions) {
  * @param {mqtt.Client} client The MQTT client
  */
 function activateConnectHook(client: mqtt.Client) {
-  client.on('connect',() => {
-    client.subscribe('hybrid/#');
-    client.publish('hybrid/server_log', 'Hello mqtt, tele server is connected');
+  client.on("connect", () => {
+    client.subscribe("hybrid/#");
+    client.publish("hybrid/server_log", "Hello mqtt, tele server is connected");
   });
 }
 
@@ -114,8 +114,8 @@ function activateConnectHook(client: mqtt.Client) {
  * @param {mqtt.Client} client The MQTT client
  */
 function activateDisconnectHook(client: mqtt.Client) {
-  client.on('disconnect', () => {
-    socket.sendConnectionStatus('DISCONNECTED');
+  client.on("disconnect", () => {
+    socket.sendConnectionStatus("DISCONNECTED");
   });
 }
 
@@ -126,48 +126,51 @@ function activateDisconnectHook(client: mqtt.Client) {
  * @param {MQTTOptions} options The MQTT options
  */
 function activateMessageHook(client: mqtt.Client, options: MQTTOptions) {
-  client.on('message', (topic, message) => {
-    if (topic === 'hybrid/server_log') {
+  client.on("message", (topic, message) => {
+    if (topic === "hybrid/server_log") {
       return;
     }
 
     if (!state.isReceivingData) {
-      logger.info('Receiving MQTT data');
+      logger.info("Receiving MQTT data");
       state.isReceivingData = true;
     }
 
-    const {
-      receive_time,
-      parsed_message,
-    } = parseMessage(message);
+    const { receive_time, parsed_message } = parseMessage(message);
 
     state.nextOutput[topic] = parsed_message;
-    state.nextOutput['time'] = receive_time;
+    state.nextOutput["time"] = receive_time;
 
-    if (options.verboseLogging && receive_time - state.consoleLastSent > options.consoleLogDelay) {
+    if (
+      options.verboseLogging &&
+      receive_time - state.consoleLastSent > options.consoleLogDelay
+    ) {
       logger.info(state.nextOutput);
       state.consoleLastSent = receive_time;
     }
 
     if (receive_time - state.socketLastSent > options.socketSendDelay) {
       socket.sendData(state.nextOutput);
-      socket.sendConnectionStatus('CONNECTED');
+      socket.sendConnectionStatus("CONNECTED");
 
       state.mqttTimeout.refresh();
       state.socketLastSent = receive_time;
     }
 
-    if (options.mongoEnabled && receive_time - state.dbLastSent > options.dbWriteDelay){
+    if (
+      options.mongoEnabled &&
+      receive_time - state.dbLastSent > options.dbWriteDelay
+    ) {
       const outputs_equal = isEqual(
-        {...state.lastDbOutput, time: undefined},
-        {...state.nextOutput, time: undefined}
+        { ...state.lastDbOutput, time: undefined },
+        { ...state.nextOutput, time: undefined }
       );
 
       if (!outputs_equal) {
         storage.writeData(state.nextOutput);
-        delete state.nextOutput['_id'];
+        delete state.nextOutput["_id"];
         state.dbLastSent = receive_time;
-        state.lastDbOutput = {...state.nextOutput};
+        state.lastDbOutput = { ...state.nextOutput };
       } else {
         // console.debug('No change in data, not written to db')
       }
@@ -179,8 +182,8 @@ function activateMessageHook(client: mqtt.Client, options: MQTTOptions) {
  * Represents a parsed MQTT message
  */
 type MQTTMessage = {
-  receive_time: number,
-  parsed_message: string
+  receive_time: number;
+  parsed_message: string;
 };
 
 /**
@@ -194,6 +197,6 @@ function parseMessage(message: Buffer): MQTTMessage {
   const msgStr = message.toString();
   return {
     receive_time: new Date().getTime(),
-    parsed_message: msgStr.substring(msgStr.indexOf(':') + 1),
+    parsed_message: msgStr.substring(msgStr.indexOf(":") + 1)
   };
 }

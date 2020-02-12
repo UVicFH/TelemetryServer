@@ -5,9 +5,9 @@
  */
 
 // Libaries
-import * as winston from 'winston';
-import * as util from 'util';
-import chalk from 'chalk';
+import * as winston from "winston";
+import * as util from "util";
+import chalk from "chalk";
 
 const MODULE_PAD_WIDTH = 9;
 const LEVEL_PAD_WIDTH = 17;
@@ -22,19 +22,18 @@ const LEVEL_PAD_WIDTH = 17;
  */
 export function getLogger(moduleName: string): winston.Logger {
   const logFormat = winston.format.printf(({ timestamp, level, message }) => {
-    const messageFormatted = typeof message === 'object'
-      ? util.format('%o', message)
-      : message;
+    const messageFormatted =
+      typeof message === "object" ? util.format("%o", message) : message;
 
     let levelFormatted: string;
     switch (level.toLowerCase()) {
-      case 'info':
+      case "info":
         levelFormatted = chalk.green(level);
         break;
-      case 'warn':
+      case "warn":
         levelFormatted = chalk.yellow(level);
         break;
-      case 'error':
+      case "error":
         levelFormatted = chalk.red(level);
         break;
       default:
@@ -42,22 +41,24 @@ export function getLogger(moduleName: string): winston.Logger {
         break;
     }
 
-    return util.format('%s %s %s %s',
+    return util.format(
+      "%s %s %s %s",
       `[${timestamp}]`,
       `[${moduleName}]`.padEnd(MODULE_PAD_WIDTH),
       `[${levelFormatted}]`.padEnd(LEVEL_PAD_WIDTH),
-      messageFormatted);
+      messageFormatted
+    );
   });
 
   const logger = winston.createLogger({
-    level: 'debug',
+    level: "debug",
     format: winston.format.combine(
       winston.format.timestamp({
-        format: 'h:mm:ss A',
+        format: "h:mm:ss A"
       }),
       logFormat
     ),
-    transports: [new winston.transports.Console()],
+    transports: [new winston.transports.Console()]
   });
 
   return logger;
