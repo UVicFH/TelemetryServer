@@ -67,8 +67,4 @@ export function activate(port: number) {
       );
     }
   );
-        `Net module successfully initialized, listening on port ${port}`
-      );
-    }
-  );
 }
